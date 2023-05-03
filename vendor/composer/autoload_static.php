@@ -909,6 +909,7 @@ class ComposerStaticInit6d4dc9ac1df58adee1c193488042ec4c
         'App\\Models\\VideoCallHistory' => __DIR__ . '/../..' . '/app/Models/VideoCallHistory.php',
         'App\\Models\\WorkingHour' => __DIR__ . '/../..' . '/app/Models/WorkingHour.php',
         'App\\Models\\ZoomMetting' => __DIR__ . '/../..' . '/app/Models/ZoomMetting.php',
+        'App\\Notifications\\AppointmentNotification' => __DIR__ . '/../..' . '/app/Notifications/AppointmentNotification.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',

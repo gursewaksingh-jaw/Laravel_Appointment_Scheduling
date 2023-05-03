@@ -97,7 +97,7 @@ $app_logo = App\Models\Setting::first();
             @endphp
         </div>
         <li class="dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <div class="d-sm-none d-lg-inline-block">{{ auth()->user()->name }}</div>
+                <div class="d-sm-none d-lg-inline-block" style="font-size:18px;">{{ auth()->user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                 @if(auth()->user()->hasRole('super admin'))

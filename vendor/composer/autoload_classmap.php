@@ -108,6 +108,7 @@ return array(
     'App\\Models\\VideoCallHistory' => $baseDir . '/app/Models/VideoCallHistory.php',
     'App\\Models\\WorkingHour' => $baseDir . '/app/Models/WorkingHour.php',
     'App\\Models\\ZoomMetting' => $baseDir . '/app/Models/ZoomMetting.php',
+    'App\\Notifications\\AppointmentNotification' => $baseDir . '/app/Notifications/AppointmentNotification.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
     'App\\Providers\\AuthServiceProvider' => $baseDir . '/app/Providers/AuthServiceProvider.php',
     'App\\Providers\\BroadcastServiceProvider' => $baseDir . '/app/Providers/BroadcastServiceProvider.php',

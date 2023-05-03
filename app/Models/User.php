@@ -11,13 +11,14 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,HasRoles,HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
     protected $fillable = [
         'name',
         'email',
@@ -61,11 +62,15 @@ class User extends Authenticatable
 
     protected function getFullImageAttribute()
     {
-        return url('images/upload').'/'.$this->image;
+        return url('images/upload') . '/' . $this->image;
     }
 
     public function User()
     {
         return $this->hasOne('App\Models\User');
+    }
+    public function routeNotificationForSlack($notification)
+    {
+        return 'https://hooks.slack.com/services/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';
     }
 }
