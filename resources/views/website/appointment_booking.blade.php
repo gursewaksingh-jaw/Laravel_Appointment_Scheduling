@@ -223,13 +223,15 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div id="step2" class="hidden">
                     <div class="flex xxsm:flex-col sm:flex-row">
                         <div class="2xl:w-1/2 border-r xxsm:w-full">
                             @php
                             $date = Carbon\Carbon::now(env('timezone'));
                             @endphp
-                            <input type="hidden" name="date" value="{{ $date->format('Y-m-d') }}">
+                            <input type="hidden" name="date" value="">
                             <div id="datepickerId" onclick="dateChange()" data-date="{{ $date->format('Y-m-d') }}"></div>
                             <div class="p-5">
                                 <div class="mt-2 font-normal text-xl font-fira-sans">
@@ -267,7 +269,7 @@
                             $hospital_name = $hospital->name;
                             $address = $hospital->address;
                             @endphp
-                            <input type="hidden" name="hospital_id" value="{{ $hospital->id }}">
+                            <input type="hidden" name="hospital_id" value="">
                             @endif
                             <div onclick="changeHospital({{ $loop->iteration }})" data-attribute="{{ $hospital->id }}" class="border hospitals hospital{{ $loop->iteration }} border-1 border-gray-200 p-2 cursor-pointer {{ $loop->first ? 'activeAddress' : ' mt-4' }}">
                                 <div>
@@ -291,6 +293,12 @@
                         </div>
                     </div>
                 </div>
+
+
+
+
+
+
                 <div id="step3" class="hidden">
                     <div class="flex xlg:flex-row xxsm:flex-col">
                         <div class="col-span-5 p-5 w-full">
@@ -454,6 +462,15 @@
                         </div>
                     </div>
                 </div>
+
+
+
+
+
+
+
+
+
             </form>
         </div>
         <div class="Appointment-detail flex justify-between mt-3 mb-3">

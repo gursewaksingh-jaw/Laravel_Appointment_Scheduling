@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  bootstrap="./snippet-bootstrap.php"
+  colors="true"
+  >
+  <testsuites>
+    <testsuite name="Snippets Test Suite">
+      <directory>tests/Snippet</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+      <directory suffix=".php">src</directory>
+      <exclude>
+        <directory suffix=".php">src/V[!a-zA-Z]*</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+</phpunit>

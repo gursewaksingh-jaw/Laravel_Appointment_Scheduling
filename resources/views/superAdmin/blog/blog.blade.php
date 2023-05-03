@@ -72,7 +72,7 @@
                     @endforeach
                 </div>
 
-                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, sint?</h1>
+
 
 
             </div>

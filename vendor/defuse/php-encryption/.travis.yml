@@ -1,0 +1,48 @@
+language: php
+sudo: false
+
+matrix:
+  fast_finish: true
+  include:
+    - php: "5.6"
+      env: USE_PSALM=0
+    - php: "7.0"
+      env: USE_PSALM=0
+    - php: "7.1"
+      env: USE_PSALM=1
+    - php: "7.2"
+      env: USE_PSALM=1
+    - php: "7.3"
+      env: USE_PSALM=1
+    - php: "7.4"
+      env: USE_PSALM=1
+    - php: "8.0"
+      env: USE_PSALM=1
+    - php: "nightly"
+      env: USE_PSALM=1
+    - php: "hhvm"
+      env: USE_PSALM=1
+  allow_failures:
+    - php: "nightly"
+    - php: "hhvm"
+    - php: "8.0"
+install:
+    - composer install
+    - curl -LSs https://box-project.github.io/box2/installer.php | php
+    - mkdir ~/box
+    - mv box.phar ~/box/box
+before_script:
+    - echo "xdebug.mode = coverage" > extra_php_config.ini
+    - phpenv config-add extra_php_config.ini
+script:
+    - ./test.sh
+    - PATH=$PATH:~/box/ make -C dist/ build-phar
+    - ./test.sh dist/defuse-crypto.phar
+    - if [[ $USE_PSALM -eq 1 ]]; then composer require --with-all-dependencies --dev "vimeo/psalm:dev-master"; fi
+    - if [[ $USE_PSALM -eq 1 ]]; then composer install; fi
+    - if [[ $USE_PSALM -eq 1 ]]; then vendor/bin/psalm; fi
+
+after_success:
+    - cat coverage1.xml
+    - cat coverage2.xml
+    - bash <(curl -s https://codecov.io/bash) -Z

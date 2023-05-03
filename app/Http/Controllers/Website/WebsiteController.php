@@ -43,7 +43,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AppointmentNotification;
 use Spatie\Permission\Models\Role;
+
 
 class WebsiteController extends Controller
 {
@@ -370,12 +373,15 @@ class WebsiteController extends Controller
 
     public function booking($id, $name)
     {
+
         $doctor = Doctor::with(['category', 'expertise'])->find($id);
         $patient_addressess = UserAddress::where('user_id', auth()->user()->id)->get();
         $today_timeslots = (new CustomController)->timeSlot($id, Carbon::today(env('timezone'))->format('Y-m-d'));
         $doctor->hospital = (new CustomController)->getHospital($id);
         $setting = Setting::first();
         $currency = $setting->currency_symbol;
+        $authid = Auth::user()->id;
+
         return view('website.appointment_booking', compact('doctor', 'patient_addressess', 'today_timeslots', 'currency', 'setting'));
     }
 
@@ -669,11 +675,21 @@ class WebsiteController extends Controller
         return view('website.login');
     }
 
+
+
+
+
+
+
+
+
+
+
+
     // BookAppointment
     public function bookAppointment(Request $request)
     {
         $data = $request->all();
-        // return $data;
         $request->validate([
             'appointment_for' => 'bail|required',
             'illness_information' => 'bail|required',
@@ -700,6 +716,7 @@ class WebsiteController extends Controller
             $data['report_image'] = json_encode($report);
         }
         $doctor = Doctor::find($data['doctor_id']);
+        Notification::send(Auth::user()->id, new AppointmentNotification($doctor));
         $data['amount'] = $doctor->appointment_fees;
         if ($doctor->based_on == 'commission') {
             $comm = $doctor->appointment_fees * $doctor->commission_amount;
@@ -713,11 +730,18 @@ class WebsiteController extends Controller
             return $a !== "";
         });
         $appointment = Appointment::create($data);
-        // session()->forget('doctor_id');
-        // session()->forget('time');
-        // session()->forget('date');
         return response(['success' => true]);
     }
+
+
+
+
+
+
+
+
+
+
 
     // Check Coupen
     public function checkCoupen(Request $request)
