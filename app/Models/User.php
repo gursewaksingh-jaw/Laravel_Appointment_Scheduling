@@ -69,7 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\User');
     }
-    public function routeNotificationForSlack($notification)
+    public function routeNotificationForSlack()
     {
         return 'https://hooks.slack.com/services/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';
     }
