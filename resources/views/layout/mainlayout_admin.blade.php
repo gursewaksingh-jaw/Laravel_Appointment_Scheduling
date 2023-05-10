@@ -15,7 +15,6 @@
             @include('layout.partials.navbar_admin')
             @include('layout.partials.sidebar')
             @endif
-            <h1>vdbvdkvdj</h1>
             <div class="main-content">
                 @if (auth()->user()->hasRole('doctor'))
                 @php

@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $content, $subject; 
+    public $content, $subject;
 
 
     /**
@@ -17,7 +17,7 @@ class SendMail extends Mailable
      *
      * @return void
      */
-    public function __construct($content,$subject)
+    public function __construct($content, $subject)
     {
         $this->content = $content;
         $this->subject = $subject;
@@ -31,8 +31,8 @@ class SendMail extends Mailable
     public function build()
     {
         return $this->from(env('MAIL_FROM_ADDRESS'))->subject($this->subject)
-        ->view('send_mail')->with([
-            'content' => $this->content,
-        ]);
+            ->view('send_mail')->with([
+                'content' => $this->content,
+            ]);
     }
 }

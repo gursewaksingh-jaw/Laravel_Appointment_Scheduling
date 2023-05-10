@@ -7,17 +7,17 @@ $(document).ready(function () {
     //     table = $('.datatable').DataTable();
     // }
     // else {
-        // $('.datatable').DataTable({
-        //     language: {
-        //         paginate: {
-        //             previous: "<i class='fa fa-angle-left'>",
-        //             next: "<i class='fa fa-angle-right'>",
-        //             first: "<i class='fa fa-angle-double-left'>",
-        //             last: "<i class='fa fa-angle-double-right'>",
-        //         }
-        //     },
-        //     pagingType: "full_numbers",
-        // });
+    // $('.datatable').DataTable({
+    //     language: {
+    //         paginate: {
+    //             previous: "<i class='fa fa-angle-left'>",
+    //             next: "<i class='fa fa-angle-right'>",
+    //             first: "<i class='fa fa-angle-double-left'>",
+    //             last: "<i class='fa fa-angle-double-right'>",
+    //         }
+    //     },
+    //     pagingType: "full_numbers",
+    // });
     // }
 });
 
@@ -286,7 +286,7 @@ function cancelAppointment() {
 
 }
 
-function delete_account(){
+function delete_account() {
     Swal.fire({
         title: 'Are you sure to delete the account?',
         text: "You will lose all the data and won't be able to log back in",
@@ -307,7 +307,7 @@ function delete_account(){
                 url: base_url + '/delete_account',
                 success: function (result) {
                     if (result.success == true) {
-                         window.location.href = base_url;
+                        window.location.href = base_url;
                     }
                     else {
                         Swal.fire({
@@ -326,7 +326,7 @@ function delete_account(){
                 }
             });
         }
-        
+
     });
 
 }

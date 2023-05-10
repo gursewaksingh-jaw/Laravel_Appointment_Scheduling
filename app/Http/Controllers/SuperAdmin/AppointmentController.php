@@ -28,6 +28,7 @@ use App\Models\WorkingHour;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmAppointment;
 use Illuminate\Support\Facades\Session;
 
 class AppointmentController extends Controller
@@ -41,15 +42,13 @@ class AppointmentController extends Controller
     public function inCalendar()
     {
         (new CustomController)->cancel_max_order();
-        if(auth()->user()->hasRole('super admin'))
-        {
+        if (auth()->user()->hasRole('super admin')) {
             $appointments = Appointment::with('user')->get();
-            return response(['success' => true , 'data' => $appointments]);
+            return response(['success' => true, 'data' => $appointments]);
         }
-        if(auth()->user()->hasRole('doctor'))
-        {
+        if (auth()->user()->hasRole('doctor')) {
             $appointments = Appointment::with('user')->get();
-            return response(['success' => true , 'data' => $appointments]);
+            return response(['success' => true, 'data' => $appointments]);
         }
     }
 
@@ -57,18 +56,17 @@ class AppointmentController extends Controller
     {
         (new CustomController)->cancel_max_order();
         abort_if(Gate::denies('commission_details'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $doctor = Doctor::where('user_id',auth()->user()->id)->first();
+        $doctor = Doctor::where('user_id', auth()->user()->id)->first();
         $now = Carbon::today(env('timezone'));
         $appointments = array();
-        for ($i = 0; $i < 7; $i++)
-        {
-            $appointment = Appointment::where('doctor_id',$doctor->id)->whereDate('created_at', $now)->get();
+        for ($i = 0; $i < 7; $i++) {
+            $appointment = Appointment::where('doctor_id', $doctor->id)->whereDate('created_at', $now)->get();
             $appointment['amount'] = $appointment->sum('amount');
             $appointment['admin_commission'] = $appointment->sum('admin_commission');
             $appointment['doctor_commission'] = $appointment->sum('doctor_commission');
             $now =  $now->subDay();
             $appointment['date'] = $now->toDateString();
-            array_push($appointments,$appointment);
+            array_push($appointments, $appointment);
         }
 
         $currency = Setting::first()->currency_symbol;
@@ -93,59 +91,60 @@ class AppointmentController extends Controller
 
         $settels = array();
         $orderIds = array();
-        foreach ($data as $key)
-        {
-            $settle = Settle::where('doctor_id', $doctor->id)->where('created_at', '>=', $key['start'].' 00.00.00')->where('created_at', '<=', $key['end'].' 23.59.59')->get();
+        foreach ($data as $key) {
+            $settle = Settle::where('doctor_id', $doctor->id)->where('created_at', '>=', $key['start'] . ' 00.00.00')->where('created_at', '<=', $key['end'] . ' 23.59.59')->get();
             $value['d_total_task'] = $settle->count();
             $value['admin_earning'] = $settle->sum('admin_amount');
             $value['doctor_earning'] = $settle->sum('doctor_amount');
             $value['d_total_amount'] = $value['admin_earning'] + $value['doctor_earning'];
-            $remainingOnline = Settle::where([['doctor_id', $doctor->id], ['payment', 0],['doctor_status', 0]])->where('created_at', '>=', $key['start'].' 00.00.00')->where('created_at', '<=', $key['end'].' 23.59.59')->get();
-            $remainingOffline = Settle::where([['doctor_id', $doctor->id], ['payment', 1],['doctor_status', 0]])->where('created_at', '>=', $key['start'].' 00.00.00')->where('created_at', '<=', $key['end'].' 23.59.59')->get();
+            $remainingOnline = Settle::where([['doctor_id', $doctor->id], ['payment', 0], ['doctor_status', 0]])->where('created_at', '>=', $key['start'] . ' 00.00.00')->where('created_at', '<=', $key['end'] . ' 23.59.59')->get();
+            $remainingOffline = Settle::where([['doctor_id', $doctor->id], ['payment', 1], ['doctor_status', 0]])->where('created_at', '>=', $key['start'] . ' 00.00.00')->where('created_at', '<=', $key['end'] . ' 23.59.59')->get();
 
             $online = $remainingOnline->sum('doctor_amount'); // admin e devana
             $offline = $remainingOffline->sum('admin_amount'); // admin e levana
 
             $value['duration'] = $key['start'] . ' - ' . $key['end'];
             $value['d_balance'] = $offline - $online; // + hoy to levana - devana
-            array_push($settels,$value);
+            array_push($settels, $value);
         }
-        return view('superAdmin.appointment.commission',compact('doctor', 'appointments', 'currency','settels'));
+        return view('superAdmin.appointment.commission', compact('doctor', 'appointments', 'currency', 'settels'));
     }
 
     public function show_settlement(Request $request)
     {
-        $duration = explode(' - ',$request->duration);
+        $duration = explode(' - ', $request->duration);
         $currency = Setting::first()->currency_symbol;
-        $settle = Settle::where('created_at', '>=', $duration[0].' 00.00.00')->where('created_at', '<=', $duration[1].' 23.59.59')->get();
-        foreach($settle as $s)
-        {
+        $settle = Settle::where('created_at', '>=', $duration[0] . ' 00.00.00')->where('created_at', '<=', $duration[1] . ' 23.59.59')->get();
+        foreach ($settle as $s) {
             $s->date = $s->created_at->toDateString();
         }
-        return response(['success' => true , 'data' => $settle , 'currency' => $currency]);
+        return response(['success' => true, 'data' => $settle, 'currency' => $currency]);
     }
 
     public function acceptAppointment($appointment_id)
     {
+        $doctorname = auth()->user()->id;
+        $slot = Appointment::where('id', $appointment_id)->first();
+        $patientname = User::where('id', $slot->user_id)->get();
         Appointment::find($appointment_id)->update(['appointment_status' => 'approve']);
-        $this->notificationChange($appointment_id,'Accept');
-        return redirect()->back()->with('status',__('status change successfully...!!'));
+        $this->notificationChange($appointment_id, 'Accept');
+        Mail::to('akash7@mailinator.com')->send(new ConfirmAppointment($patientname, $patientname, $slot));
+        return back()->with('status', __('status change successfully...!!'));
     }
 
     public function cancelAppointment($appointment_id)
     {
         Appointment::find($appointment_id)->update(['appointment_status' => 'cancel']);
-        $this->notificationChange($appointment_id,'Cancel');
-        return redirect()->back()->with('status',__('status change successfully...!!'));
+        $this->notificationChange($appointment_id, 'Cancel');
+        return redirect()->back()->with('status', __('status change successfully...!!'));
     }
 
     public function completeAppointment($appointment_id)
     {
         $appointment = Appointment::find($appointment_id);
-        Appointment::find($appointment_id)->update(['appointment_status' => 'complete','payment_status' => 1]);
-        $doctor = Doctor::where('user_id',auth()->user()->id)->first();
-        if($doctor->based_on == 'commission')
-        {
+        Appointment::find($appointment_id)->update(['appointment_status' => 'complete', 'payment_status' => 1]);
+        $doctor = Doctor::where('user_id', auth()->user()->id)->first();
+        if ($doctor->based_on == 'commission') {
             $settle = array();
             $settle['appointment_id'] = $appointment->id;
             $settle['doctor_id'] = $appointment->doctor_id;
@@ -155,15 +154,15 @@ class AppointmentController extends Controller
             $settle['doctor_status'] = 0;
             Settle::create($settle);
         }
-        $this->notificationChange($appointment_id,'Complete');
-        return redirect()->back()->with('status',__('status change successfully...!!'));
+        $this->notificationChange($appointment_id, 'Complete');
+        return redirect()->back()->with('status', __('status change successfully...!!'));
     }
 
     // change Appointment to user
-    public function notificationChange($appointment_id,$status)
+    public function notificationChange($appointment_id, $status)
     {
         $appointment = Appointment::with('user')->find($appointment_id);
-        $notification_template = NotificationTemplate::where('title','status change')->first();
+        $notification_template = NotificationTemplate::where('title', 'status change')->first();
         $msg_content = $notification_template->msg_content;
         $mail_content = $notification_template->mail_content;
         $detail['user_name'] = $appointment->user->name;
@@ -171,11 +170,11 @@ class AppointmentController extends Controller
         $detail['date'] = $status;
         $detail['status'] = $appointment->date;
         $detail['app_name'] = Setting::first()->business_name;
-        $user_data = ["{{user_name}}","{{appointment_id}}","{{date}}","{{status}}","{{app_name}}"];
+        $user_data = ["{{user_name}}", "{{appointment_id}}", "{{date}}", "{{status}}", "{{app_name}}"];
         $mail1 = str_replace($user_data, $detail, $mail_content);
         $message1 = str_replace($user_data, $detail, $msg_content);
         $setting = Setting::first();
-        if(Setting::first()->patient_mail == 1){
+        if (Setting::first()->patient_mail == 1) {
             try {
                 $config = array(
                     'driver'     => $setting->mail_mailer,
@@ -187,13 +186,12 @@ class AppointmentController extends Controller
                     'password'   => $setting->mail_password
                 );
                 Config::set('mail', $config);
-                Mail::to(auth()->user()->email)->send(new SendMail($mail1,$notification_template->subject));
+                Mail::to(auth()->user()->email)->send(new SendMail($mail1, $notification_template->subject));
             } catch (\Throwable $th) {
-
             }
         }
 
-        if(Setting::first()->patient_notification == 1){
+        if (Setting::first()->patient_notification == 1) {
             try {
                 Config::set('onesignal.app_id', env('patient_app_id'));
                 Config::set('onesignal.rest_api_key', env('patient_api_key'));
@@ -226,78 +224,72 @@ class AppointmentController extends Controller
         (new CustomController)->cancel_max_order();
         abort_if(Gate::denies('appointment_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $currency = Setting::first()->currency_symbol;
-        if(auth()->user()->hasRole('super admin'))
-        {
-            $appointments = Appointment::with(['doctor','address'])->orderBy('id','DESC')->get();
-        }
-        else
-        {
-            $doctor = Doctor::where('user_id',auth()->user()->id)->first();
-            $appointments = Appointment::with(['doctor','address','hospital'])->where('doctor_id',$doctor->id)->orderBy('id','DESC')->get();
-            foreach ($appointments as $appointment)
-            {
-                if(Prescription::where('appointment_id',$appointment->id)->first())
-                {
+        if (auth()->user()->hasRole('super admin')) {
+            $appointments = Appointment::with(['doctor', 'address'])->orderBy('id', 'DESC')->get();
+        } else {
+            $doctor = Doctor::where('user_id', auth()->user()->id)->first();
+            $appointments = Appointment::with(['doctor', 'address', 'hospital'])->where('doctor_id', $doctor->id)->orderBy('id', 'DESC')->get();
+            foreach ($appointments as $appointment) {
+                if (Prescription::where('appointment_id', $appointment->id)->first()) {
                     $appointment->prescription = '1';
-                    $appointment->preData = Prescription::where('appointment_id',$appointment->id)->first();
-                }
-                else
-                {
+                    $appointment->preData = Prescription::where('appointment_id', $appointment->id)->first();
+                } else {
                     $appointment->prescription = '0';
                 }
             }
         }
-        return view('superAdmin.appointment.appointment',compact('appointments','currency'));
+
+        return view('superAdmin.appointment.appointment', compact('appointments', 'currency'));
     }
 
     public function show_appointment($appointment_id)
     {
+
         (new CustomController)->cancel_max_order();
         $currency = Setting::first()->currency_symbol;
-        $appointment = Appointment::with(['doctor','address','hospital'])->find($appointment_id);
-        return response(['success' => true , 'data' => $appointment , 'currency' => $currency]);
+        $appointment = Appointment::with(['doctor', 'address', 'hospital'])->find($appointment_id);
+        return response(['success' => true, 'data' => $appointment, 'currency' => $currency]);
     }
 
     public function prescription($appointment_id)
     {
         (new CustomController)->cancel_max_order();
-        $appointment = Appointment::with(['doctor','user'])->find($appointment_id);
-        $doctor = Doctor::with(['expertise','treatment','category'])->find($appointment->doctor_id);
+        $appointment = Appointment::with(['doctor', 'user'])->find($appointment_id);
+        $doctor = Doctor::with(['expertise', 'treatment', 'category'])->find($appointment->doctor_id);
         $medicines = Medicine::whereStatus('1')->get();
-        return view('superAdmin.doctor.prescription',compact('appointment','doctor','medicines'));
+        return view('superAdmin.doctor.prescription', compact('appointment', 'doctor', 'medicines'));
     }
 
     public function all_medicine()
     {
         $medicines = Medicine::whereStatus('1')->get();
-        return response(['success' => true , 'data' => $medicines]);
+        return response(['success' => true, 'data' => $medicines]);
     }
 
     public function addPrescription(Request $request)
     {
         $data = $request->all();
         $medicine = array();
-        for ($i = 0; $i < count($data['medicines']); $i++)
-        {
+        for ($i = 0; $i < count($data['medicines']); $i++) {
             $temp['medicine'] = $data['medicines'][$i];
             $temp['days'] = $data['day'][$i];
-            $temp['morning'] = isset($data['morning'.$i]) ? 1 : 0;
-            $temp['afternoon'] = isset($data['afternoon'.$i]) ? 1 : 0;
-            $temp['night'] = isset($data['night'.$i]) ? 1 : 0;
-            array_push($medicine,$temp);
+            $temp['morning'] = isset($data['morning' . $i]) ? 1 : 0;
+            $temp['afternoon'] = isset($data['afternoon' . $i]) ? 1 : 0;
+            $temp['night'] = isset($data['night' . $i]) ? 1 : 0;
+            array_push($medicine, $temp);
         }
         $pre['medicines'] = json_encode($medicine);
         $pre['appointment_id'] = $data['appointment_id'];
-        $pre['doctor_id'] = Doctor::where('user_id',auth()->user()->id)->first()->id;
+        $pre['doctor_id'] = Doctor::where('user_id', auth()->user()->id)->first()->id;
         $pre['user_id'] = $data['user_id'];
         $pres = Prescription::create($pre);
-        $prescription = Prescription::with(['doctor','user'])->find($pres->id);
+        $prescription = Prescription::with(['doctor', 'user'])->find($pres->id);
         $prescription->doctorUser = User::find($prescription->doctor['user_id']);
 
         $medicineName = $pres->medicines;
         $pdf = PDF::loadView('temp', compact('medicineName'));
         $path = public_path() . '/prescription/upload';
-        $fileName =  uniqid() . '.' . 'pdf' ;
+        $fileName =  uniqid() . '.' . 'pdf';
         $pdf->save($path . '/' . $fileName);
         $pres->pdf = $fileName;
         $pres->save();
@@ -305,25 +297,25 @@ class AppointmentController extends Controller
     }
     public function changeTimeslot(Request $request)
     {
-        $doctor = Doctor::where('user_id',auth()->user()->id)->first();
-        $timeslots = (new CustomController)->timeSlot($doctor->id,$request->date);
-        return response(['success' => true , 'data' => $timeslots]);
+        $doctor = Doctor::where('user_id', auth()->user()->id)->first();
+        $timeslots = (new CustomController)->timeSlot($doctor->id, $request->date);
+        return response(['success' => true, 'data' => $timeslots]);
     }
 
     public function createAppointment($id)
     {
-        $patient = User::where('id',$id)->first();
-        $doctor = Doctor::with(['category','expertise'])->where('user_id',auth()->user()->id)->first();
-        $hosp = explode(',',$doctor->hospital_id);
-        $hospitals = Hospital::whereIn('id',$hosp)->get();
-        $patient_addressess = UserAddress::where('user_id',$id)->get();
+        $patient = User::where('id', $id)->first();
+        $doctor = Doctor::with(['category', 'expertise'])->where('user_id', auth()->user()->id)->first();
+        $hosp = explode(',', $doctor->hospital_id);
+        $hospitals = Hospital::whereIn('id', $hosp)->get();
+        $patient_addressess = UserAddress::where('user_id', $id)->get();
         $date = Carbon::now(env('timezone'))->format('Y-m-d');
-        $timeslots = (new CustomController)->timeSlot($doctor->id,$date);
+        $timeslots = (new CustomController)->timeSlot($doctor->id, $date);
         $setting = Setting::first();
-        return view('superAdmin.appointment.create_appointment',compact('setting','patient','doctor','hospitals','date','patient_addressess','timeslots'));
+        return view('superAdmin.appointment.create_appointment', compact('setting', 'patient', 'doctor', 'hospitals', 'date', 'patient_addressess', 'timeslots'));
     }
 
-    public function storeAppointment(Request $request,$id)
+    public function storeAppointment(Request $request, $id)
     {
         $data = $request->all();
         $request->validate([
@@ -337,8 +329,8 @@ class AppointmentController extends Controller
             'hospital_id' => 'bail|required',
 
         ]);
-        $patient = User::where('id',$id)->first();
-        $doctor = Doctor::where('user_id',auth()->user()->id)->first();
+        $patient = User::where('id', $id)->first();
+        $doctor = Doctor::where('user_id', auth()->user()->id)->first();
         $data['appointment_id'] =  '#' . rand(100000, 999999);
         $data['appointment_status'] = 'pending';
         $data['patient_name'] = $patient->name;
@@ -348,49 +340,46 @@ class AppointmentController extends Controller
         $data['appointment_for'] = 'my_self';
         $data['payment_status'] = 0;
         $data['is_from'] = 1;
-        if($request->hasFile('report_image'))
-        {
+        if ($request->hasFile('report_image')) {
             $report = [];
-            for ($i=0; $i < count($data['report_image']); $i++)
-            {
+            for ($i = 0; $i < count($data['report_image']); $i++) {
                 // return $request->report_image[$i];
-                 array_push($report,(new CustomController)->imageUpload($request->report_image[$i]));
+                array_push($report, (new CustomController)->imageUpload($request->report_image[$i]));
             }
             $data['report_image'] = json_encode($report);
         }
         // dd($data);
 
-        if($doctor->based_on == 'commission')
-        {
+        if ($doctor->based_on == 'commission') {
             $comm = $doctor->appointment_fees * $doctor->commission_amount;
             $data['admin_commission'] = intval($comm / 100);
             $data['doctor_commission'] = intval($doctor->appointment_fees - $data['admin_commission']);
-        }
-        else
-        {
-            DoctorSubscription::where('doctor_id',$doctor->id)->latest()->first()->increment('booked_appointment');
+        } else {
+            DoctorSubscription::where('doctor_id', $doctor->id)->latest()->first()->increment('booked_appointment');
         }
         $data['amount'] = $doctor->appointment_fees;
         $data['payment_type'] = 'COD';
-        $data = array_filter($data, function($a) {return $a !== "";});
+        $data = array_filter($data, function ($a) {
+            return $a !== "";
+        });
         Appointment::create($data);
-        return redirect('appointment')->with('status',__('Appointment Add successfully...!!'));
+        return redirect('appointment')->with('status', __('Appointment Add successfully...!!'));
     }
     public function editAppointment($id)
     {
-        $appointment = Appointment::where('id',$id)->first();
-        $patient = User::where('id',$appointment->user_id)->first();
-        $doctor = Doctor::where('id',$appointment->doctor_id)->first();
-        $hosp = explode(',',$doctor->hospital_id);
-        $hospitals = Hospital::whereIn('id',$hosp)->get();
-        $patient_addressess = UserAddress::where('user_id',$appointment->user_id)->get();
+        $appointment = Appointment::where('id', $id)->first();
+        $patient = User::where('id', $appointment->user_id)->first();
+        $doctor = Doctor::where('id', $appointment->doctor_id)->first();
+        $hosp = explode(',', $doctor->hospital_id);
+        $hospitals = Hospital::whereIn('id', $hosp)->get();
+        $patient_addressess = UserAddress::where('user_id', $appointment->user_id)->get();
         $date = $appointment->date;
-        $timeslots = (new CustomController)->timeSlot($doctor->id,$date);
+        $timeslots = (new CustomController)->timeSlot($doctor->id, $date);
         $setting = Setting::first();
-        return view('superAdmin.appointment.edit_appointment',compact('setting','appointment','hospitals','patient_addressess','date','timeslots','patient'));
+        return view('superAdmin.appointment.edit_appointment', compact('setting', 'appointment', 'hospitals', 'patient_addressess', 'date', 'timeslots', 'patient'));
     }
 
-    public function updateAppointment(Request $request,$id)
+    public function updateAppointment(Request $request, $id)
     {
         $data = $request->all();
         $request->validate([
@@ -404,18 +393,18 @@ class AppointmentController extends Controller
             'hospital_id' => 'bail|required',
         ]);
         $appointment = Appointment::find($id);
-        if($appointment->date != $request->date)
-        {
-            $request->validate([
-                'date' => 'bail|required|after:yesterday',
-            ],
-            [
-                'date.after' => 'Date must be future date.',
-            ]
-        );
+        if ($appointment->date != $request->date) {
+            $request->validate(
+                [
+                    'date' => 'bail|required|after:yesterday',
+                ],
+                [
+                    'date.after' => 'Date must be future date.',
+                ]
+            );
         }
-        $patient = User::where('id',$appointment->user_id)->first();
-        $doctor = Doctor::where('id',$appointment->doctor_id)->first();
+        $patient = User::where('id', $appointment->user_id)->first();
+        $doctor = Doctor::where('id', $appointment->doctor_id)->first();
         $data['appointment_id'] =  $appointment->appointment_id;
         $data['appointment_status'] = $appointment->appointment_status;
         $data['patient_name'] = $appointment->patient_name;
@@ -426,46 +415,41 @@ class AppointmentController extends Controller
         $data['payment_status'] = $appointment->payment_status;
         $data['is_from'] = 1;
         $report = [];
-        for ($i=0; $i < 3; $i++)
-        {
-            $report_img = json_decode(DB::table('appointment')->where('id',$appointment->id)->value('report_image'));
-            if ($data['type'.$i] === 'new')
-            {
-                if($i == $data['change_iteration'.$i] && $data['change_iteration'.$i] != null)
-                {
-                    if(isset($appointment->report_image[$i]))
-                        (new CustomController)->deleteFile($report_img[$i]);
-                    array_push($report,(new CustomController)->imageUpload($request->file('report_image')[$i]));
+        for ($i = 0; $i < 3; $i++) {
+            $report_img = json_decode(DB::table('appointment')->where('id', $appointment->id)->value('report_image'));
+            if ($data['type' . $i] === 'new') {
+                if ($i == $data['change_iteration' . $i] && $data['change_iteration' . $i] != null) {
+                    if (isset($appointment->report_image[$i])) (new CustomController)->deleteFile($report_img[$i]);
+                    array_push($report, (new CustomController)->imageUpload($request->file('report_image')[$i]));
                 }
             }
-            if ($data['type'.$i] === 'old') {
-                array_push($report,$report_img[$i]);
-
+            if ($data['type' . $i] === 'old') {
+                array_push($report, $report_img[$i]);
             }
         }
-        if (count($report)>0)
+        if (count($report) > 0)
             $data['report_image'] = json_encode($report);
 
         $data['amount'] = $doctor->appointment_fees;
         $data['payment_type'] = $appointment->payment_type;
-        $data = array_filter($data, function($a) {return $a !== "";});
+        $data = array_filter($data, function ($a) {
+            return $a !== "";
+        });
         $appointment->update($data);
-        return redirect('appointment')->with('status',__('Appointment Update successfully...!!'));
+        return redirect('appointment')->with('status', __('Appointment Update successfully...!!'));
     }
 
     public function deleteAppointment($id)
     {
         $appointment  = Appointment::find($id);
 
-        if(isset($appointment->image))
-        {
-            for ($i=0; $i < count($appointment['report_image']); $i++)
-            {
+        if (isset($appointment->image)) {
+            for ($i = 0; $i < count($appointment['report_image']); $i++) {
                 (new CustomController)->deleteFile($appointment->report_image[$i]);
             }
         }
         $appointment->delete();
-        return redirect('appointment')->with('status',__('Appointment Delete successfully...!!'));
+        return redirect('appointment')->with('status', __('Appointment Delete successfully...!!'));
     }
 
     public function addAddr(Request $request)
@@ -476,6 +460,6 @@ class AppointmentController extends Controller
             'lat' => 'bail|required',
         ]);
         $userAddress = UserAddress::create($request->all());
-        return response(['success' => true,'data' => $userAddress]);
+        return response(['success' => true, 'data' => $userAddress]);
     }
 }

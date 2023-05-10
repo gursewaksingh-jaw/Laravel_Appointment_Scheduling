@@ -50,9 +50,7 @@
         @endif
 
         <div class="card">
-            <div class="card-header w-100 text-right d-flex justify-content-between">
-                @include('superAdmin.auth.exportButtons')
-            </div>
+
 
             <div class="card-body">
                 <div class="table-responsive">
@@ -131,6 +129,10 @@
                                     <span class="badge badge-pill bg-default-light">{{__('Completed')}}</span>
                                     @endif
                                 </td>
+
+
+
+
                                 @if (auth()->user()->hasRole('doctor'))
                                 <td class="d-flex w-100">
                                     @if ($appointment->appointment_status == 'approve' || $appointment->appointment_status == 'complete')
@@ -138,15 +140,19 @@
                                         <i class="fas fa-check"></i> {{__('Complete')}}
                                     </a>
                                     @elseif($appointment->appointment_status == 'pending' || $appointment->appointment_status == 'cancel')
-                                    <a href="{{ url('acceptAppointment/'.$appointment->id) }}" class="btn btn-sm bg-success-light {{ $appointment->appointment_status != 'pending' ? 'disabled' : '' }}">
+                                    <a href="{{ url('acceptAppointment/'.$appointment->id) }}" class="btn btn-sm bg-success-light {{ $appointment->appointment_status != 'pending' ? '' : '' }}">
                                         <i class="fas fa-check"></i> {{__('Accept')}}
                                     </a>
-                                    <a href="{{ url('cancelAppointment/'.$appointment->id) }}" class="btn btn-sm bg-danger-light ml-2 {{ $appointment->appointment_status != 'pending' ? 'disabled' : '' }}">
+                                    <a href="{{ url('cancelAppointment/'.$appointment->id) }}" class="btn btn-sm bg-danger-light ml-2 {{ $appointment->appointment_status != 'pending' ? '' : '' }}">
                                         <i class="fas fa-times"></i>{{__('Cancel')}}
                                     </a>
                                     @endif
                                 </td>
                                 @endif
+
+
+
+
                                 @if(auth()->user()->hasRole('doctor') && $appointment->is_from == 1)
                                 <td>
                                     <a href="#edit_specialities_details" onclick="show_appointment({{$appointment->id}})" data-toggle="modal" class="text-info">
@@ -166,6 +172,12 @@
                                     </a>
                                 </td>
                                 @endif
+
+
+
+
+
+
                                 @if (auth()->user()->hasRole('doctor'))
                                 @if ($appointment->prescription == 0)
                                 <td>
@@ -195,6 +207,11 @@
         </div>
     </div>
 </section>
+
+
+
+
+
 <div class="modal fade" id="edit_specialities_details" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -270,5 +287,4 @@
         </div>
     </div>
 </div>
-
 @endsection

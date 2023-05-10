@@ -102,14 +102,17 @@
                     <li>
                         <a href="{{url('/')}}" class="{{ $activePage == 'home' ? 'text-purple' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('Home') }}</a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="#" class="{{ $activePage == 'about' ? 'text-purple' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('About') }}</a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="{{url('/show-doctors')}}" class="{{ $activePage == 'doctors' ? 'text-purple' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('Find Doctors') }}</a>
                     </li>
                     <li>
-                        <a href="{{url('/our_blogs')}}" class="{{ $activePage == 'ourblogs' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">{{ __('Blog') }}</a>
+                        <a href="{{url('/our_blogs')}}" class="{{ $activePage == 'ourblogs' ? 'text-purple' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('Blog') }}</a>
+                    </li>
+                    <li>
+                        <a href="{{url('/contact_us')}}" class="{{ $activePage == 'contactus' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('Contact Us') }}</a>
                     </li>
                 </ul>
             </div>

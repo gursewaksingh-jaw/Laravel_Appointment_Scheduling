@@ -5,17 +5,17 @@
 
 <section class="section">
     @include('layout.breadcrumb',[
-        'title' => __('Add Pharmacy'),
-        'url' => url('pharmacy'),
-        'urlTitle' => __('Pharmacy')
+    'title' => __('Add Pharmacy'),
+    'url' => url('pharmacy'),
+    'urlTitle' => __('Pharmacy')
     ])
     @if (session('status'))
     @include('superAdmin.auth.status',[
-        'status' => session('status')])
+    'status' => session('status')])
     @endif
 
     <div class="section_body">
-    <form action="{{ url('pharmacy') }}" method="post" enctype="multipart/form-data" class="myform">
+        <form action="{{ url('pharmacy') }}" method="post" enctype="multipart/form-data" class="myform">
             @csrf
             <div class="card">
                 <div class="card-body">
@@ -33,9 +33,9 @@
                                 </div>
                             </div>
                             @error('image')
-                                <div class="custom_error">
-                                    {{ $message }}
-                                </div>
+                            <div class="custom_error">
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
                         <div class="col-lg-10 col-md-8">
@@ -63,10 +63,10 @@
                     <div class="form-group mt-4">
                         <label for="phone_number" class="ul-form__label"> {{__('Phone number')}}</label>
                         <div class="d-flex @error('phone') is-invalid @enderror">
-                            <select name="phone_code" class="phone_code_select2" >
+                            <select name="phone_code" class="phone_code_select2">
                                 @foreach ($countries as $country)
-                                    {{-- <option value="+{{$country->phonecode}}">+{{ $country->phonecode }}</option> --}}
-                                    <option value="+{{$country->phonecode}}" {{(old('phone_code') == $country->phonecode) ? 'selected':''}}>+{{ $country->phonecode }}</option>
+                                {{-- <option value="+{{$country->phonecode}}">+{{ $country->phonecode }}</option> --}}
+                                <option value="+{{$country->phonecode}}" {{(old('phone_code') == $country->phonecode) ? 'selected':''}}>+{{ $country->phonecode }}</option>
                                 @endforeach
                             </select>
                             <input type="number" min="1" name="phone" class="form-control" value="{{ old('phone') }}">
@@ -82,18 +82,18 @@
                             <label class="col-form-label">{{__('Start Time')}}</label>
                             <input class="form-control timepicker @error('start_time') is-invalid @enderror" name="start_time" value="{{old('start_time')}}" type="time">
                             @error('start_time')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
                         <div class="col-lg-6 form-group">
                             <label class="col-form-label">{{__('End Time')}}</label>
                             <input class="form-control timepicker @error('end_time') is-invalid @enderror" name="end_time" value="{{old('end_time')}}" type="time">
                             @error('end_time')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
                     </div>
@@ -101,14 +101,14 @@
                         <label class="col-form-label">{{__('Commission Amount')}}({{__('in %')}})</label>
                         <input type="number" min="1" class="form-control @error('commission_amount') is-invalid @enderror" name="commission_amount" value="{{ old('commission_amount') }}">
                         @error('commission_amount')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label class="col-form-label">{{__('Description')}}</label>
-                        <textarea name="description" class="form-control summernote @error('description') is-invalid @enderror" >{{old('description')}}</textarea>
+                        <textarea name="description" class="form-control summernote @error('description') is-invalid @enderror">{{old('description')}}</textarea>
                         @error('description')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -119,7 +119,7 @@
                         <div class="pac-card col-md-12 mb-3" id="pac-card">
                             <label for="pac-input">{{__('Location based on latitude/longtitude')}}</label>
                             <div id="pac-container">
-                                <input id="pac-input" type="text" name="address" class="form-control" value="{{ old('address') }}"/>
+                                <input id="pac-input" type="text" name="address" class="form-control" value="{{ old('address') }}" />
                                 <input type="hidden" name="lat" value="{{$setting->lat}}" id="lat">
                                 <input type="hidden" name="lang" value="{{$setting->lang}}" id="lng">
                             </div>
@@ -173,6 +173,6 @@
 @endsection
 
 @section('js')
-    <script src="{{ url('assets_admin/js/hospital_map.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{App\Models\Setting::first()->map_key}}&callback=initAutocomplete&libraries=places&v=weekly" async></script>
+<script src="{{ url('assets_admin/js/hospital_map.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{App\Models\Setting::first()->map_key}}&callback=initAutocomplete&libraries=places&v=weekly" async></script>
 @endsection

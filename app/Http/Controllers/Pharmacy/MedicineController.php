@@ -23,10 +23,10 @@ class MedicineController extends Controller
     public function index()
     {
         abort_if(Gate::denies('medicine_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $pharmacy = Pharmacy::where('user_id',auth()->user()->id)->first();
-        $medicines = Medicine::where('pharmacy_id',$pharmacy->id)->orderBy('id','DESC')->get();
+        $pharmacy = Pharmacy::where('user_id', auth()->user()->id)->first();
+        $medicines = Medicine::where('pharmacy_id', $pharmacy->id)->orderBy('id', 'DESC')->get();
         $currency = Setting::first()->currency_symbol;
-        return view('pharmacyAdmin.medicine.medicine',compact('medicines','currency'));
+        return view('pharmacyAdmin.medicine.medicine', compact('medicines', 'currency'));
     }
 
     /**
@@ -37,9 +37,9 @@ class MedicineController extends Controller
     public function create()
     {
         abort_if(Gate::denies('medicine_add'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $pharmacy = Pharmacy::where('user_id',auth()->user()->id)->first();
+        $pharmacy = Pharmacy::where('user_id', auth()->user()->id)->first();
         $categories = MedicineCategory::whereStatus(1)->get();
-        return view('pharmacyAdmin.medicine.create_medicine',compact('pharmacy','categories'));
+        return view('pharmacyAdmin.medicine.create_medicine', compact('pharmacy', 'categories'));
     }
 
     /**
@@ -50,36 +50,33 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required|max:255|unique:medicine',
-            'incoming_stock' => 'bail|required|numeric',
-            'price_pr_strip' => 'bail|required|numeric',
-            'number_of_medicine' => 'bail|required|numeric',
-            'description' => 'bail|required',
-            'works' => 'bail|required',
-            'image' => 'bail|mimes:jpeg,png,jpg|max:1000',
-        ],
-        [
-            'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ]);
+        $request->validate(
+            [
+                'name' => 'bail|required|max:255|unique:medicine',
+                'incoming_stock' => 'bail|required|numeric',
+                'price_pr_strip' => 'bail|required|numeric',
+                'number_of_medicine' => 'bail|required|numeric',
+                'description' => 'bail|required',
+                'works' => 'bail|required',
+                'image' => 'required',
+            ],
+            // [
+            //     'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            // ]
+        );
         $data = $request->all();
         $data['total_stock'] = $data['incoming_stock'];
-        if($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $data['image'] = (new CustomController)->imageUpload($request->image);
-        }
-        else
-        {
+        } else {
             $data['image'] = 'prod_default.png';
         }
-        if(isset($data['title']))
-        {
+        if (isset($data['title'])) {
             $meta_info = array();
-            for ($i=0; $i < count($data['title']); $i++)
-            {
+            for ($i = 0; $i < count($data['title']); $i++) {
                 $temp['title'] = $data['title'][$i];
                 $temp['desc'] = $data['desc'][$i];
-                array_push($meta_info,$temp);
+                array_push($meta_info, $temp);
             }
             $data['meta_info'] = json_encode($meta_info);
         }
@@ -110,7 +107,7 @@ class MedicineController extends Controller
         $medicine = Medicine::find($id);
         $pharmacy = Pharmacy::find($medicine->pharmacy_id);
         $categories = MedicineCategory::whereStatus(1)->get();
-        return view('pharmacyAdmin.medicine.edit_medicine',compact('medicine','pharmacy','categories'));
+        return view('pharmacyAdmin.medicine.edit_medicine', compact('medicine', 'pharmacy', 'categories'));
     }
 
     /**
@@ -122,32 +119,31 @@ class MedicineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'bail|required|max:255|unique:medicine,name,' . $id . ',id',
-            'price_pr_strip' => 'bail|required|numeric',
-            'number_of_medicine' => 'bail|required|numeric',
-            'description' => 'bail|required',
-            'works' => 'bail|required',
-            'image' => 'bail|mimes:jpeg,png,jpg|max:1000',
-        ],
-        [
-            'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ]);
+        $request->validate(
+            [
+                'name' => 'bail|required|max:255|unique:medicine,name,' . $id . ',id',
+                'price_pr_strip' => 'bail|required|numeric',
+                'number_of_medicine' => 'bail|required|numeric',
+                'description' => 'bail|required',
+                'works' => 'bail|required',
+                'image' => 'required',
+            ],
+            // [
+            //     'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            // ]
+        );
         $id = Medicine::find($id);
         $data = $request->all();
-        if($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             (new CustomController)->deleteFile($id->image);
             $data['image'] = (new CustomController)->imageUpload($request->image);
         }
-        if(isset($data['title']))
-        {
+        if (isset($data['title'])) {
             $meta_info = array();
-            for ($i=0; $i < count($data['title']); $i++)
-            {
+            for ($i = 0; $i < count($data['title']); $i++) {
                 $temp['title'] = $data['title'][$i];
                 $temp['desc'] = $data['desc'][$i];
-                array_push($meta_info,$temp);
+                array_push($meta_info, $temp);
             }
             $data['meta_info'] = json_encode($meta_info);
         }

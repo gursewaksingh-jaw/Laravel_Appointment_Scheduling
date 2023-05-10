@@ -63,6 +63,7 @@
                         <a href="javascript:void(0)" class="text-primary add-favourite" data-id="{{ $doctor['id'] }}"><i class="{{ $doctor['is_fav'] == 'true' ? 'fa fa-bookmark' : 'fa-regular fa-bookmark' }} border border-primary 2xl:p-2 xl:p-2 xlg:p-2 lg:p-2 xmd:p-1 xxsm:p-2"></i></a>
                         <a href="mailto:{{ $doctor->user['email'] }}" class="text-primary"><i class="fa fa-envelope border border-primary 2xl:p-2 xl:p-2 xlg:p-2 lg:p-2 xmd:p-1 xxsm:p-2"></i></a>
                         <a href="tel:{{ $doctor->phone }}" class="text-primary"><i class="fa-solid fa-phone border border-primary 2xl:p-2 xl:p-2 xlg:p-2 lg:p-2 xmd:p-1 xxsm:p-2"></i></a>
+                        <a href="" class="text-primary"><i class="fa-solid fa-message border border-primary 2xl:p-2 xl:p-2 xlg:p-2 lg:p-2 xmd:p-1 xxsm:p-2"></i></a>
                     </div>
                 </div>
             </div>

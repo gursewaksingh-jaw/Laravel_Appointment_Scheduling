@@ -5,10 +5,11 @@
 @section('content')
 <section class="section">
     @include('layout.breadcrumb',[
-        'title' => __('Add medicine'),
-        'url' => url('medicines'),
-        'urlTitle' => __('Medicine')
+    'title' => __('Add medicine'),
+    'url' => url('medicines'),
+    'urlTitle' => __('Medicine')
     ])
+
     <form action="{{ url('medicines') }}" method="post" enctype="multipart/form-data" class="myform">
         @csrf
         <input type="hidden" name="pharmacy_id" value="{{ $pharmacy->id }}">
@@ -31,9 +32,9 @@
                             </div>
                         </div>
                         @error('image')
-                            <div class="custom_error">
-                                {{ $message }}
-                            </div>
+                        <div class="custom_error">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
                     <div class="col-lg-10 col-md-8">
@@ -79,13 +80,13 @@
                     <label class="col-form-label">{{__('Medicine Category')}}</label>
                     <select name="medicine_category_id" class="select2 @error('medicine_category_id') is-invalid @enderror">
                         @foreach ($categories as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        <option value="{{$category->id}}">{{$category->name}}</option>
                         @endforeach
                     </select>
                     @error('medicine_category_id')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
                 <div class="form-group">

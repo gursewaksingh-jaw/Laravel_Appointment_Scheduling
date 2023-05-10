@@ -46,6 +46,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AppointmentNotification;
 use Spatie\Permission\Models\Role;
+use App\Models\ContactUs;
 
 
 class WebsiteController extends Controller
@@ -54,7 +55,8 @@ class WebsiteController extends Controller
     {
         $banners = Banner::get();
         // $doctors = Doctor::with('category:id,name')->where([['status', 1], ['is_filled', 1], ['subscription_status', 1]])->get()->take(2);
-        $doctors = Doctor::with('category:id,name')->where([['status', 1], ['subscription_status', 1]])->get()->take(2);
+        // $doctors = Doctor::with('category:id,name')->where([['status', 1], ['subscription_status', 1]])->get()->take(2);
+        $doctors = Doctor::with('category:id,name')->where([['status', 1]])->get()->take(8);
         $treatments = Treatments::whereStatus(1)->paginate(6);
         $setting = Setting::first();
         $reviews = Review::get();
@@ -687,6 +689,8 @@ class WebsiteController extends Controller
 
 
     // BookAppointment
+
+
     public function bookAppointment(Request $request)
     {
         $data = $request->all();
@@ -716,7 +720,8 @@ class WebsiteController extends Controller
             $data['report_image'] = json_encode($report);
         }
         $doctor = Doctor::find($data['doctor_id']);
-        Notification::send(Auth::user()->id, new AppointmentNotification($doctor));
+        $authuser = auth()->user();
+        $authuser->notify(new AppointmentNotification($doctor, $authuser));
         $data['amount'] = $doctor->appointment_fees;
         if ($doctor->based_on == 'commission') {
             $comm = $doctor->appointment_fees * $doctor->commission_amount;
@@ -725,6 +730,8 @@ class WebsiteController extends Controller
         } else {
             DoctorSubscription::where('doctor_id', $doctor->id)->latest()->first()->increment('booked_appointment');
         }
+        // dd(Notification::send($doctor, new AppointmentNotification($doctor, $authuser)));
+
         $data['payment_type'] = strtoupper($data['payment_type']);
         $data = array_filter($data, function ($a) {
             return $a !== "";
@@ -1103,16 +1110,30 @@ class WebsiteController extends Controller
     public function userProfile()
     {
         (new CustomController)->cancel_max_order();
+
         $appointments = Appointment::with(['doctor', 'hospital'])->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         foreach ($appointments as $appointment) {
             $appointment->isReview = Review::where('appointment_id', $appointment->id)->exists();
         }
-        $prescriptions = Prescription::with(['doctor', 'appointment'])->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
-        $purchaseMedicines = PurchaseMedicine::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $prescriptions = Prescription::join('appointment', 'appointment.id', '=', 'prescription.appointment_id')->where('prescription.user_id', auth()->user()->id)->get();
+        // $prescriptions = Prescription::with(['doctor', 'appointment'])->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         $currency = Setting::first()->currency_symbol;
-        $cancel_reason = Setting::first()->cancel_reason;
-        return view('website.user.user_profile', compact('appointments', 'purchaseMedicines', 'currency', 'prescriptions', 'cancel_reason'));
+        return view('website.user.user_profile', compact('appointments', 'currency', 'prescriptions'));
     }
+    // public function userProfile()
+    // {
+    //     (new CustomController)->cancel_max_order();
+    //     $appointments = Appointment::with(['doctor', 'hospital'])->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+    //     foreach ($appointments as $appointment) {
+    //         $appointment->isReview = Review::where('appointment_id', $appointment->id)->exists();
+    //     }
+    //     $prescriptions = Prescription::with(['doctor', 'appointment'])->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+    //     // $purchaseMedicines = PurchaseMedicine::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+    //     // dd($purchaseMedicines);
+    //     $currency = Setting::first()->currency_symbol;
+    //     $cancel_reason = Setting::first()->cancel_reason;
+    //     return view('website.user.user_profile', compact('appointments', 'currency', 'prescriptions', 'cancel_reason'));
+    // }
 
     public function testReport()
     {
@@ -1280,5 +1301,28 @@ class WebsiteController extends Controller
             Auth::logout();
             return response()->json(['success' => true, 'message' => 'Account Delete Successfully!']);
         }
+    }
+
+    public function contactus()
+    {
+        return view('contact_us');
+    }
+
+    public function contactus_message(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'number' => 'required',
+            'message' => 'required'
+        ]);
+
+        $user = new ContactUs;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->number = $request->phone;
+        $user->message = $request->message;
+        $user->save();
+        return redirect()->with;
     }
 }
