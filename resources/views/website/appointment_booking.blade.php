@@ -320,7 +320,7 @@
                                 </div>
                                 <div>
                                     @if ($setting->paypal)
-                                    <div class="border border-1 border-white-light font-fira-sans paymentDiv text-center p-5" data-attribute="paypal">
+                                    <div class="border border-1 border-white-light font-fira-sans paymentDiv text-center p-5" data-attribute="paypal" onclick="paypalPayment()">
                                         <img class="m-auto" width="16px" height="18px" src="{{ url('assets/image/logos_paypal.png') }}" alt="">
                                         <p class="mt-3 overflow-hidden">{{ __('Paypal') }}</p>
                                     </div>
@@ -362,7 +362,7 @@
                             <div class="codDiv text-center">
                                 <input type="button" data-te-ripple-init data-te-ripple-color="light" class="font-fira-sans text-white !bg-primary p-3 text-sm font-normal w-40 h-11 cursor-pointer mt-10" onclick="booking()" value="{{__('Pay Cash on Delivery')}}">
                             </div>
-                            <div class="paypalDiv hidden">
+                            <div class="paypalDiv ">
                                 <div class="paypal_row_body justify-center">
 
                                 </div>
@@ -462,15 +462,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
             </form>
         </div>
         <div class="Appointment-detail flex justify-between mt-3 mb-3">
@@ -479,7 +470,6 @@
             <a href="javascript:void(0)" data-te-ripple-init data-te-ripple-color="light" onclick="booking()" id="payment" class="!text-white !bg-primary text-center w-32 h-11 text-base font-normal font-fira-sans hidden pt-2" type="button">{{ __('Proceed To Pay') }}</a>
         </div>
     </div>
-
     <div data-te-modal-init class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none" id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollable" aria-modal="true" role="dialog">
         <div data-te-modal-dialog-ref class="pointer-events-none relative flex min-h-[calc(100%-1rem)] w-auto translate-y-[-50px] items-center opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto min-[576px]:mt-7 min-[576px]:min-h-[calc(100%-3.5rem)] min-[576px]:max-w-[500px]">
             <div class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white-50 bg-clip-padding rounded-md outline-none text-current">
@@ -510,9 +500,7 @@
     </div>
 </div>
 @endsection
-
 @section('js')
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"> </script>
 <script src="https://unpkg.com/flowbite-datepicker@1.2.2/dist/js/datepicker-full.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
@@ -521,13 +509,9 @@
 @endif
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script src="{{ url('payment/razorpay.js')}}"></script>
-
-@if ($setting->paypal)
-<script src="https://www.paypal.com/sdk/js?client-id={{ App\Models\Setting::first()->paypal_client_id }}&currency={{ App\Models\Setting::first()->currency_code }}" data-namespace="paypal_sdk"></script>
-@endif
+<script src="https://www.paypal.com/sdk/js?client-id=AerQy4CkgzaNMAKWJmbDqKHEVjSSXOqJb3PqrLHJwS7EJvib_F8euqpbZDIWRqEXHHotocYkkX5IDUvG&components=buttons"></script>
 <script src="{{ url('payment/stripe.js')}}"></script>
 <script src="{{ url('assets/js/appointment.js') }}"></script>
-
 @if (App\Models\Setting::first()->map_key)
 <script src="https://maps.googleapis.com/maps/api/js?key={{App\Models\Setting::first()->map_key}}&callback=initAutocomplete&libraries=places&v=weekly" async></script>
 @endif
@@ -541,5 +525,34 @@
         prevArrow: '<svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.68771 1.5649e-08L8 1.37357L2.62459 7L8 12.6264L6.68771 14L8.34742e-08 7L6.68771 1.5649e-08Z" fill="#000"/></svg>',
         nextArrow: '<svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.31229 14L-6.00408e-08 12.6264L5.37541 7L-5.51919e-07 1.37357L1.31229 -5.73622e-08L8 7L1.31229 14Z" fill="#000"/></svg>',
     });
+    //  Paypal function
+    function paypalPayment() {
+        if (currency != 'INR') {
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: 20
+                            }
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        $('input[name=payment_type]').val('PAYPAL');
+                        $('input[name=payment_status]').val(1);
+                        $('input[name=payment_token]').val(details.id);
+                        booking();
+                    });
+                },
+                onError: function(err) {
+                    alert(err);
+                }
+            }).render('.paypal_row_body');
+        } else {
+            $('.paypal_row_body').html('INR currency not supported in Paypal');
+        }
+    }
 </script>
 @endsection

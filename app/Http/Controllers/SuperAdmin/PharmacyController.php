@@ -29,8 +29,8 @@ class PharmacyController extends Controller
     public function index()
     {
         abort_if(Gate::denies('pharmacy_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $pharamacies = Pharmacy::orderBy('id','DESC')->get();
-        return view('superAdmin.pharmacy.pharmacy',compact('pharamacies'));
+        $pharamacies = Pharmacy::orderBy('id', 'DESC')->get();
+        return view('superAdmin.pharmacy.pharmacy', compact('pharamacies'));
     }
 
     /**
@@ -40,11 +40,12 @@ class PharmacyController extends Controller
      */
     public function create()
     {
+
         abort_if(Gate::denies('pharmacy_add'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $countries = Country::get();
         $currency = Setting::first()->currency_symbol;
         $setting = Setting::first();
-        return view('superAdmin.pharmacy.create_pharmacy',compact('countries','currency','setting'));
+        return view('superAdmin.pharmacy.create_pharmacy', compact('countries', 'currency', 'setting'));
     }
 
     /**
@@ -55,22 +56,25 @@ class PharmacyController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'bail|required',
-            'phone' => 'bail|required|digits_between:6,12',
-            'email' => 'bail|required|email|unique:users',
-            'start_time' => 'bail|required',
-            'end_time' => 'bail|required|after:start_time',
-            'address' => 'bail|required',
-            'commission_amount' => 'bail|required',
-            'image' => 'bail|mimes:jpeg,png,jpg|max:1000',
-        ],
-        [
-            'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ]);
+
+        $request->validate(
+            [
+                'name' => 'bail|required',
+                'phone' => 'bail|required|digits_between:6,12',
+                'email' => 'bail|required|email|unique:users',
+                'start_time' => 'bail|required',
+                'end_time' => 'bail|required|after:start_time',
+                'address' => 'bail|required',
+                'commission_amount' => 'bail|required',
+                'image' => 'required',
+            ],
+            // [
+            //     'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            // ]
+        );
         $data = $request->all();
         $setting = Setting::first();
-        $password = mt_rand(10000,999999);
+        $password = mt_rand(10000, 999999);
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -80,9 +84,8 @@ class PharmacyController extends Controller
             'phone_code' => $data['phone_code'],
         ]);
         $user->assignRole('pharmacy');
-        $message1 = 'Dear Pharmacy Admin your password is : '.$password;
-        try
-        {
+        $message1 = 'Dear Pharmacy Admin your password is : ' . $password;
+        try {
             $config = array(
                 'driver'     => $setting->mail_mailer,
                 'host'       => $setting->mail_host,
@@ -93,44 +96,37 @@ class PharmacyController extends Controller
                 'password'   => $setting->mail_password
             );
             Config::set('mail', $config);
-            Mail::to($user->email)->send(new SendMail($message1,'Pharmacy Password'));
+            Mail::to($user->email)->send(new SendMail($message1, 'Pharmacy Password'));
+        } catch (\Throwable $th) {
         }
-        catch (\Throwable $th)
-        {
-
-        }
-        $data['user_id'] = $user->id;
+        // $data['user_id'] = $user->id;
+        $data['user_id'] = auth()->user()->id;
         $data['start_time'] = strtolower(Carbon::parse($data['start_time'])->format('h:i a'));
         $data['end_time'] = strtolower(Carbon::parse($data['end_time'])->format('h:i a'));
-        if($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $data['image'] = (new CustomController)->imageUpload($request->image);
-        }
-        else
-        {
+        } else {
             $data['image'] = 'defaultUser.png';
         }
         $data['status'] = 1;
         $data['is_shipping'] = $request->has('is_shipping') ? 1 : 0;
         $delivery = [];
-        for ($i=0; $i < count($data['min_value']); $i++)
-        {
+        for ($i = 0; $i < count($data['min_value']); $i++) {
             $temp['min_value'] = $data['min_value'][$i];
             $temp['max_value'] = $data['max_value'][$i];
             $temp['charges'] = $data['charges'][$i];
-            array_push($delivery,$temp);
+            array_push($delivery, $temp);
         }
         $data['delivery_charges'] = json_encode($delivery);
         $pharmacy = Pharmacy::create($data);
         $start_time = strtolower($pharmacy->start_time);
         $end_time = strtolower($pharmacy->end_time);
-        $days = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
-        for($i = 0; $i < count($days); $i++)
-        {
+        $days = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+        for ($i = 0; $i < count($days); $i++) {
             $master = array();
             $temp2['start_time'] = $start_time;
             $temp2['end_time'] = $end_time;
-            array_push($master,$temp2);
+            array_push($master, $temp2);
             $work_time['pharmacy_id'] = $pharmacy->id;
             $work_time['period_list'] = json_encode($master);
             $work_time['day_index'] = $days[$i];
@@ -149,9 +145,9 @@ class PharmacyController extends Controller
     public function show($id)
     {
         $pharmacy = Pharmacy::find($id);
-        $medicines = PurchaseMedicine::with('user')->where('pharmacy_id',$pharmacy->id)->get();
+        $medicines = PurchaseMedicine::with('user')->where('pharmacy_id', $pharmacy->id)->get();
         $currency = Setting::first()->currency_symbol;
-        return view('superAdmin.pharmacy.show_pharmacy',compact('pharmacy','medicines','currency'));
+        return view('superAdmin.pharmacy.show_pharmacy', compact('pharmacy', 'medicines', 'currency'));
     }
 
     /**
@@ -168,7 +164,7 @@ class PharmacyController extends Controller
         $currency = Setting::first()->currency_symbol;
         $pharmacy['start_time'] = Carbon::parse($pharmacy['start_time'])->format('H:i');
         $pharmacy['end_time'] = Carbon::parse($pharmacy['end_time'])->format('H:i');
-        return view('superAdmin.pharmacy.edit_pharmacy',compact('countries','pharmacy','currency'));
+        return view('superAdmin.pharmacy.edit_pharmacy', compact('countries', 'pharmacy', 'currency'));
     }
 
     /**
@@ -180,31 +176,31 @@ class PharmacyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'bail|required',
-            'start_time' => 'bail|required',
-            'end_time' => 'bail|required|after:start_time',
-            'address' => 'bail|required',
-            'commission_amount' => 'bail|required',
-            'image' => 'bail|mimes:jpeg,png,jpg|max:1000',
-        ],
-        [
-            'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ]);
+        $request->validate(
+            [
+                'name' => 'bail|required',
+                'start_time' => 'bail|required',
+                'end_time' => 'bail|required|after:start_time',
+                'address' => 'bail|required',
+                'commission_amount' => 'bail|required',
+                'image' => 'bail|mimes:jpeg,png,jpg|max:1000',
+            ],
+            [
+                'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            ]
+        );
         $pharmacy = Pharmacy::find($id);
         $data = $request->all();
         $data['is_shipping'] = $request->has('is_shipping') ? 1 : 0;
         $delivery = [];
-        for ($i=0; $i < count($data['min_value']); $i++)
-        {
+        for ($i = 0; $i < count($data['min_value']); $i++) {
             $temp['min_value'] = $data['min_value'][$i];
             $temp['max_value'] = $data['max_value'][$i];
             $temp['charges'] = $data['charges'][$i];
-            array_push($delivery,$temp);
+            array_push($delivery, $temp);
         }
         $data['delivery_charges'] = json_encode($delivery);
-        if($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             (new CustomController)->deleteFile($pharmacy->image);
             $data['image'] = (new CustomController)->imageUpload($request->image);
         }
@@ -246,15 +242,14 @@ class PharmacyController extends Controller
         $now = Carbon::today();
         $medicines = array();
         $currency = Setting::first()->currency_symbol;
-        for ($i = 0; $i < 7; $i++)
-        {
-            $appointment = PurchaseMedicine::where('pharmacy_id',$pharmacy->id)->whereDate('created_at', $now)->get();
+        for ($i = 0; $i < 7; $i++) {
+            $appointment = PurchaseMedicine::where('pharmacy_id', $pharmacy->id)->whereDate('created_at', $now)->get();
             $appointment['amount'] = $appointment->sum('amount');
             $appointment['admin_commission'] = $appointment->sum('admin_commission');
             $appointment['pharmacy_commission'] = $appointment->sum('pharmacy_commission');
             $now =  $now->subDay();
             $appointment['date'] = $now->toDateString();
-            array_push($medicines,$appointment);
+            array_push($medicines, $appointment);
         }
 
         $past = Carbon::now(env('timezone'))->subDays(35);
@@ -277,43 +272,41 @@ class PharmacyController extends Controller
 
         $settels = array();
         $orderIds = array();
-        foreach ($data as $key)
-        {
-            $settle = PharmacySettle::where('pharmacy_id', $pharmacy->id)->where('created_at', '>=', $key['start'].' 00.00.00')->where('created_at', '<=', $key['end'].' 23.59.59')->get();
+        foreach ($data as $key) {
+            $settle = PharmacySettle::where('pharmacy_id', $pharmacy->id)->where('created_at', '>=', $key['start'] . ' 00.00.00')->where('created_at', '<=', $key['end'] . ' 23.59.59')->get();
             $value['d_total_task'] = $settle->count();
             $value['admin_earning'] = $settle->sum('admin_amount');
             $value['pharmacy_earning'] = $settle->sum('pharmacy_amount');
             $value['d_total_amount'] = $value['admin_earning'] + $value['pharmacy_earning'];
-            $remainingOnline = PharmacySettle::where([['pharmacy_id', $pharmacy->id], ['payment', 0],['pharmacy_status', 0]])->where('created_at', '>=', $key['start'].' 00.00.00')->where('created_at', '<=', $key['end'].' 23.59.59')->get();
-            $remainingOffline = PharmacySettle::where([['pharmacy_id', $pharmacy->id], ['payment', 1],['pharmacy_status', 0]])->where('created_at', '>=', $key['start'].' 00.00.00')->where('created_at', '<=', $key['end'].' 23.59.59')->get();
+            $remainingOnline = PharmacySettle::where([['pharmacy_id', $pharmacy->id], ['payment', 0], ['pharmacy_status', 0]])->where('created_at', '>=', $key['start'] . ' 00.00.00')->where('created_at', '<=', $key['end'] . ' 23.59.59')->get();
+            $remainingOffline = PharmacySettle::where([['pharmacy_id', $pharmacy->id], ['payment', 1], ['pharmacy_status', 0]])->where('created_at', '>=', $key['start'] . ' 00.00.00')->where('created_at', '<=', $key['end'] . ' 23.59.59')->get();
 
             $online = $remainingOnline->sum('pharmacy_amount'); // admin e devana
             $offline = $remainingOffline->sum('admin_amount'); // admin e levana
 
             $value['duration'] = $key['start'] . ' - ' . $key['end'];
             $value['d_balance'] = $offline - $online; // + hoy to levana - devana
-            array_push($settels,$value);
+            array_push($settels, $value);
         }
-        return view('superAdmin.pharmacy.finance',compact('pharmacy', 'medicines', 'currency','settels'));
+        return view('superAdmin.pharmacy.finance', compact('pharmacy', 'medicines', 'currency', 'settels'));
     }
 
     public function show_pharmacy_settalement(Request $request)
     {
-        $duration = explode(' - ',$request->duration);
+        $duration = explode(' - ', $request->duration);
         $currency = Setting::first()->currency_symbol;
-        $settle = PharmacySettle::where('created_at', '>=', $duration[0].' 00.00.00')->where('created_at', '<=', $duration[1].' 23.59.59')->get();
-        foreach($settle as $s)
-        {
+        $settle = PharmacySettle::where('created_at', '>=', $duration[0] . ' 00.00.00')->where('created_at', '<=', $duration[1] . ' 23.59.59')->get();
+        foreach ($settle as $s) {
             $s->date = $s->created_at->toDateString();
         }
-        return response(['success' => true , 'data' => $settle , 'currency' => $currency]);
+        return response(['success' => true, 'data' => $settle, 'currency' => $currency]);
     }
 
     public function pharmacy_schedule($pharmacy_id)
     {
         $pharmacy = Pharmacy::find($pharmacy_id);
-        $pharmacy->workingHours = PharmacyWorkingHour::where('pharmacy_id',$pharmacy->id)->get();
-        $pharmacy->firstHours = PharmacyWorkingHour::where('pharmacy_id',$pharmacy->id)->first();
-        return view('superAdmin.pharmacy.schedule',compact('pharmacy'));
+        $pharmacy->workingHours = PharmacyWorkingHour::where('pharmacy_id', $pharmacy->id)->get();
+        $pharmacy->firstHours = PharmacyWorkingHour::where('pharmacy_id', $pharmacy->id)->first();
+        return view('superAdmin.pharmacy.schedule', compact('pharmacy'));
     }
 }

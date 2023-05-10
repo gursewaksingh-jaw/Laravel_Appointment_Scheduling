@@ -2,12 +2,12 @@
 
 @section('title',__('Doctor Home'))
 @section('content')
-<section class="section" style="top:-3rem;">
+<section class="section">
     @include('layout.breadcrumb',[
     'title' => __('Doctor Dashboard'),
     ])
     <div class="row">
-        <div class="col-xl-4 col-sm-6 col-12">
+        <!-- <div class="col-xl-4 col-sm-6 col-12">
             <div class="card card-statistic-1">
                 <div class="card-icon bg-primary">
                     <i class="fas fa-user"></i>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="col-xl-4 col-sm-6 col-12">
             <div class="card card-statistic-1">
                 <div class="card-icon bg-danger">
@@ -53,8 +53,14 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
     <div class="row">
-        <div class="col-md-12 col-lg-7">
+        <div class="col-md-12 ">
             <div class="card card-chart">
                 <div class="card-header">{{__("Today's appointment")}}
                 </div>
@@ -123,22 +129,16 @@
             </div>
             <!-- /Sales Chart -->
         </div>
-        <div class="col-md-12 col-lg-5">
-            <div class="card card-chart">
-                <div class="card-header">
-                    <h4 class="card-title">{{__('Appointments')}}</h4>
-                </div>
-                <div class="card-body">
-                    <canvas id="orderChart"></canvas>
-                    <input type="hidden" name="years" value="{{ $orderCharts['label'] }}">
-                    <input type="hidden" name="data" value="{{ $orderCharts['data'] }}">
-                </div>
-            </div>
-        </div>
     </div>
-    <div class="row">
+
+
+
+
+
+
+
+    <!-- <div class="row">
         <div class="col-md-12">
-            <!-- Latest Customers -->
             <div class="card card-table">
                 <div class="card-header">
                     <h4 class="card-title">{{__('Latest Customers')}}</h4>
@@ -180,9 +180,8 @@
                     </div>
                 </div>
             </div>
-            <!-- /Latest Customers -->
         </div>
-    </div>
+    </div> -->
 
 </section>
 @endsection

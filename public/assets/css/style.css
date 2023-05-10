@@ -425,21 +425,21 @@ input[type="file" i] {
 
 .doctor-btn {
     padding: 10px 45px;
-    background-color: #62d2a2;
+    background-color: #0B2447;
     color: #ffffff;
     display: inline-block;
     /* transition: all 0.3s; */
     transition: all 150ms ease-in-out;
-    border: 1px solid #62d2a2;
+    border: 1px solid #0B2447;
 }
 
 .doctor-btn:hover {
-    box-shadow: 0 0 10px 0 #62d2a2;
+    box-shadow: 0 0 10px 0 #0B2447;
 }
 
 /* Doctor    Sidebar  */
 .doctorsidebar-active {
-    background-color: #62d2a2;
+    background-color: #0B2447;
     border-top-right-radius: 50px;
     border-bottom-right-radius: 50px;
 }
@@ -455,9 +455,9 @@ input[type="file" i] {
 }
 
 .doctorsidebar-active:hover .doctorsidebar-text span {
-    color: #62d2a2;
+    color: #0B2447;
 }
 
 .doctorsidebar-active:hover .doctorsidebar-text i {
-    color: #62d2a2;
+    color: #0B2447;
 }

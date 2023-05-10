@@ -138,7 +138,7 @@ $(document).ready(function () {
             $('.flutterwaveDiv').hide();
             $('.razorpayDiv').hide();
             $('.codDiv').hide();
-            paypalPayment();
+            // paypalPayment();
         }
         if ($(this).attr('data-attribute') == "stripe") {
             $('.paypalDiv').hide();
@@ -659,36 +659,42 @@ function stripeResponseHandler(status, response) {
     }
 }
 
-function paypalPayment() {
-    if (currency != 'INR') {
-        $('.paypal_row_body').html('');
-        paypal_sdk.Buttons({
-            createOrder: function (data, actions) {
-                return actions.order.create({
-                    purchase_units: [{
-                        amount: {
-                            value: amount
-                        }
-                    }]
-                });
-            },
-            onApprove: function (data, actions) {
-                return actions.order.capture().then(function (details) {
-                    $('input[name=payment_type]').val('PAYPAL');
-                    $('input[name=payment_status]').val(1);
-                    $('input[name=payment_token]').val(details.id);
-                    booking();
-                });
-            },
-            onError: function (err) {
-                alert(err);
-            }
-        }).render('.paypal_row_body');
-    }
-    else {
-        $('.paypal_row_body').html('INR currency not supported in Paypal');
-    }
-}
+
+
+
+// function paypalPayment() {
+//     if (currency != 'USD') {
+//         paypal_sdk.buttons({
+//             createOrder: function (data, actions) {
+//                 return actions.order.create({
+//                     purchase_units: [{
+//                         amount: {
+//                             value: 20
+//                         }
+//                     }]
+//                 });
+//             },
+//             onApprove: function (data, actions) {
+//                 return actions.order.capture().then(function (details) {
+//                     $('input[name=payment_type]').val('PAYPAL');
+//                     $('input[name=payment_status]').val(1);
+//                     $('input[name=payment_token]').val(details.id);
+//                     booking();
+//                 });
+//             },
+//             onError: function (err) {
+//                 alert(err);
+//             }
+//         }).render('.paypal_row_body');
+//     }
+//     else {
+//         $('.paypal_row_body').html('INR currency not supported in Paypal');
+//     }
+// }
+
+
+
+
 
 function RazorPayPayment() {
     var options =

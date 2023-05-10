@@ -37,12 +37,12 @@ class HomeController extends Controller
         (new CustomController)->cancel_max_order();
         $orderCharts = $this->orderChart();
         $users = $this->userChart();
-        $allUsers = User::doesntHave('roles')->orderBy('id','DESC')->get()->take(10);
-        $allDoctors = Doctor::with('treatment')->orderBy('id','DESC')->get()->take(10);
+        $allUsers = User::doesntHave('roles')->orderBy('id', 'DESC')->get()->take(10);
+        $allDoctors = Doctor::with('treatment')->orderBy('id', 'DESC')->get()->take(10);
         $totalDoctors = Doctor::count();
         $totalUsers = User::doesntHave('roles')->count();
         $totalAppointments = Appointment::count();
-        return view('home',compact('orderCharts','users','allUsers','allDoctors','totalDoctors','totalUsers','totalAppointments'));
+        return view('home', compact('orderCharts', 'users', 'allUsers', 'allDoctors', 'totalDoctors', 'totalUsers', 'totalAppointments'));
     }
 
     public function orderChart()
@@ -51,21 +51,16 @@ class HomeController extends Controller
         $labelsYear = array();
 
         array_push($masterYear, Appointment::whereMonth('created_at', Carbon::now(env('timezone')))->count());
-        for ($i = 1; $i <= 11; $i++)
-        {
-            if ($i >= Carbon::now(env('timezone'))->month)
-            {
-                array_push($masterYear, Appointment::whereMonth('created_at',Carbon::now(env('timezone'))->subMonths($i))->whereYear('created_at', Carbon::now(env('timezone'))->subYears(1))->count());
-            }
-            else
-            {
+        for ($i = 1; $i <= 11; $i++) {
+            if ($i >= Carbon::now(env('timezone'))->month) {
+                array_push($masterYear, Appointment::whereMonth('created_at', Carbon::now(env('timezone'))->subMonths($i))->whereYear('created_at', Carbon::now(env('timezone'))->subYears(1))->count());
+            } else {
                 array_push($masterYear, Appointment::whereMonth('created_at', Carbon::now(env('timezone'))->subMonths($i))->whereYear('created_at', Carbon::now(env('timezone'))->year)->count());
             }
         }
 
         array_push($labelsYear, Carbon::now(env('timezone'))->format('M-y'));
-        for ($i = 1; $i <= 11; $i++)
-        {
+        for ($i = 1; $i <= 11; $i++) {
             array_push($labelsYear, Carbon::now(env('timezone'))->subMonths($i)->format('M-y'));
         }
         return ['data' => json_encode($masterYear), 'label' => json_encode($labelsYear)];
@@ -77,8 +72,7 @@ class HomeController extends Controller
         $month = [];
         $doctor = [];
         $user = [];
-        for ($i = 0; $i < 12; $i++)
-        {
+        for ($i = 0; $i < 12; $i++) {
             $d =  Doctor::whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->get();
             $s =  User::doesntHave('roles')->whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->get();
             array_push($month, $now->format('M'));

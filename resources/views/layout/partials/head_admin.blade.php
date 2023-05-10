@@ -41,16 +41,16 @@
 <link rel="stylesheet" href="{{asset('assets_admin/css/admin_custom.css')}}">
 
 @if (session('direction') == 'rtl')
-    <link rel="stylesheet" href="{{ url('assets_admin/css/rtl_direction.css')}}" type="text/css">
+<link rel="stylesheet" href="{{ url('assets_admin/css/rtl_direction.css')}}" type="text/css">
 @endif
 
 @php
-    $color = App\Models\Setting::first()->color;
+$color = App\Models\Setting::first()->color;
 @endphp
 
 <style>
-    :root{
-        --primary_color : <?php echo $color ?>;
-        --primary_color_hover : <?php echo $color.'cc' ?>;
+    :root {
+        --primary_color: <?php echo $color ?>;
+        --primary_color_hover: <?php echo $color . 'cc' ?>;
     }
 </style>

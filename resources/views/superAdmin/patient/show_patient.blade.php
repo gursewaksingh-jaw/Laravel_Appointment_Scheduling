@@ -5,9 +5,9 @@
 
 <section class="section">
     @include('layout.breadcrumb',[
-        'title' => $user->name . __(' Profile'),
-        'url' => url('patient'),
-        'urlTitle' => __('Patient')
+    'title' => $user->name . __(' Profile'),
+    'url' => url('patient'),
+    'urlTitle' => __('Patient')
     ])
     <div class="section_body">
         <div class="card">
@@ -29,62 +29,62 @@
                                     <th>{{__('status')}}</th>
                                     <th>{{__('view appointment')}}</th>
                                     @if (auth()->user()->hasRole('doctor'))
-                                        <th>{{__('Add prescription')}}</th>
+                                    <th>{{__('Add prescription')}}</th>
                                     @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($appointments as $appointment)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $appointment->appointment_id }}</td>
-                                        <td>
-                                            @if ($appointment->report_image != null)
-                                                @foreach ($appointment->report_image as $item)
-                                                    <a href="{{ $item }}" data-fancybox="gallery2">
-                                                        <img src="{{ $item }}" width="50px" height="50px" alt="Feature Image">
-                                                    </a>
-                                                @endforeach
-                                            @else
-                                                {{__('Image Not available')}}
-                                            @endif
-                                        </td>
-                                        <td>{{ $currency }}{{ $appointment->amount }}</td>
-                                        <td>{{ $appointment->doctor['name'] }}</td>
-                                        <td>
-                                            @if ($appointment->payment_status == 1)
-                                                <span class="btn btn-sm bg-success-light">{{__('Paid')}}</span>
-                                            @else
-                                                <span class="btn btn-sm bg-danger-light">{{__('Remaining')}}</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($appointment->appointment_status == 'pending' || $appointment->appointment_status == 'PENDING')
-                                                <span class="badge badge-pill bg-warning-light">{{__('Pending')}}</span>
-                                            @endif
-                                            @if($appointment->appointment_status == 'approve' || $appointment->appointment_status == 'APPROVE')
-                                                <span class="badge badge-pill bg-success-light">{{__('Approved')}}</span>
-                                            @endif
-                                            @if($appointment->appointment_status == 'cancel' || $appointment->appointment_status == 'CANCEL')
-                                                <span class="badge badge-pill bg-danger-light">{{__('Cancelled')}}</span>
-                                            @endif
-                                            @if($appointment->appointment_status == 'complete' || $appointment->appointment_status == 'COMPLETE')
-                                                <span class="badge badge-pill bg-default-light">{{__('Completed')}}</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="#edit_specialities_details" onclick="show_appointment({{$appointment->id}})" data-toggle="modal" class="btn btn-sm btn-primary">
-                                                {{__('View')}}
-                                            </a>
-                                        </td>
-                                        @if (auth()->user()->hasRole('doctor'))
-                                        <td>
-                                            <a href="{{ url('prescription/'.$appointment->id) }}"  class="btn btn-sm bg-success-light">
-                                                <i class="far fa-plus"></i>{{__('App prescription')}}
-                                            </a>
-                                        </td>
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $appointment->appointment_id }}</td>
+                                    <td>
+                                        @if ($appointment->report_image != null)
+                                        @foreach ($appointment->report_image as $item)
+                                        <a href="{{ $item }}" data-fancybox="gallery2">
+                                            <img src="{{ $item }}" width="50px" height="50px" alt="Feature Image">
+                                        </a>
+                                        @endforeach
+                                        @else
+                                        {{__('Image Not available')}}
                                         @endif
-                                    </tr>
+                                    </td>
+                                    <td>{{ $currency }}{{ $appointment->amount }}</td>
+                                    <td>{{ $appointment->doctor['name'] }}</td>
+                                    <td>
+                                        @if ($appointment->payment_status == 1)
+                                        <span class="btn btn-sm bg-success-light">{{__('Paid')}}</span>
+                                        @else
+                                        <span class="btn btn-sm bg-danger-light">{{__('Remaining')}}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($appointment->appointment_status == 'pending' || $appointment->appointment_status == 'PENDING')
+                                        <span class="badge badge-pill bg-warning-light">{{__('Pending')}}</span>
+                                        @endif
+                                        @if($appointment->appointment_status == 'approve' || $appointment->appointment_status == 'APPROVE')
+                                        <span class="badge badge-pill bg-success-light">{{__('Approved')}}</span>
+                                        @endif
+                                        @if($appointment->appointment_status == 'cancel' || $appointment->appointment_status == 'CANCEL')
+                                        <span class="badge badge-pill bg-danger-light">{{__('Cancelled')}}</span>
+                                        @endif
+                                        @if($appointment->appointment_status == 'complete' || $appointment->appointment_status == 'COMPLETE')
+                                        <span class="badge badge-pill bg-default-light">{{__('Completed')}}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="#edit_specialities_details" onclick="show_appointment({{$appointment->id}})" data-toggle="modal" class="btn btn-sm btn-primary">
+                                            {{__('View')}}
+                                        </a>
+                                    </td>
+                                    @if (auth()->user()->hasRole('doctor'))
+                                    <td>
+                                        <a href="{{ url('prescription/'.$appointment->id) }}" class="btn btn-sm bg-success-light">
+                                            <i class="far fa-plus"></i>{{__('App prescription')}}
+                                        </a>
+                                    </td>
+                                    @endif
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>

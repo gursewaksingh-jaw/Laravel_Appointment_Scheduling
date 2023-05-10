@@ -277,7 +277,7 @@ class DoctorController extends Controller
             }
         }
         $doctor->update($data);
-        $this->changeLanguage();
+        // $this->changeLanguage();
         return redirect('/doctor_home')->withStatus(__('Doctor updated successfully..!!'));
     }
 
@@ -299,7 +299,12 @@ class DoctorController extends Controller
     public function doctor_review()
     {
         $doctor = Doctor::where('user_id', auth()->user()->id)->first();
-        $reviews = Review::with(['appointment:id,appointment_id', 'user:id,name'])->where('doctor_id', $doctor->id)->get();
+        $reviews = Review::where('review.doctor_id', $doctor->id)->get();
+
+        // $reviews = Review::join('appointment', 'appointment.id', '=', 'review.appointment_id')->where('review.doctor_id', $doctor->id)->get();
+        // $reviews = Review::join('appointment', 'appointment.id', '=', 'review.appointment_id')->join('users', 'users.id', '=', 'review.name')->where('review.doctor_id', $doctor->id)->get();
+        // $reviews = Review::with(['appointment:id,appointment_id', 'user:id,name'])->where('doctor_id', $doctor->id)->get();
+        // 'appointment', 'appointment.id', '=', 'prescription.appointment_id'
         return view('doctor.doctor.review', compact('reviews'));
     }
 }

@@ -11,7 +11,7 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens, Notifiable;
+    use HasFactory, HasRoles, HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -59,6 +59,10 @@ class User extends Authenticatable
     ];
 
     protected $appends = ['fullImage'];
+    public function routeNotificationForSlack()
+    {
+        return 'https://hooks.slack.com/services/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';
+    }
 
     protected function getFullImageAttribute()
     {
@@ -68,9 +72,5 @@ class User extends Authenticatable
     public function User()
     {
         return $this->hasOne('App\Models\User');
-    }
-    public function routeNotificationForSlack()
-    {
-        return 'https://hooks.slack.com/services/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';
     }
 }

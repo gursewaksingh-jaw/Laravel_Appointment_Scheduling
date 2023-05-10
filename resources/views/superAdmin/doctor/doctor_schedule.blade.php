@@ -5,9 +5,9 @@
 
 <section class="section">
     @include('layout.breadcrumb',[
-        'title' => __('Doctor Schedule Timing'),
-        'url' => url('doctor'),
-        'urlTitle' =>  __('Doctor'),
+    'title' => __('Doctor Schedule Timing'),
+    'url' => url('doctor'),
+    'urlTitle' => __('Doctor'),
     ])
     <div class="section_body">
         <div class="card profile-widget mt-5">
@@ -17,12 +17,12 @@
                 </a>
                 <div class="btn-group mb-2 dropleft float-right p-3">
                     <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ __('More Details') }}
+                        {{ __('More Details') }}
                     </button>
                     <div class="dropdown-menu" x-placement="bottom-start">
-                      <a class="dropdown-item" href="{{ url('doctor/'.$doctor->id.'/'.Str::slug($doctor->name).'/dashboard') }}">{{ __('Appointment') }}</a>
-                      <a class="dropdown-item" href="{{ url('doctor/'.$doctor->id.'/'.Str::slug($doctor->name).'/patients') }}">{{ __('Patient') }}</a>
-                      <a class="dropdown-item" href="{{ url('doctor/'.$doctor->id.'/'.Str::slug($doctor->name).'/finance') }}">{{ __('Finance Details') }}</a>
+                        <a class="dropdown-item" href="{{ url('doctor/'.$doctor->id.'/'.Str::slug($doctor->name).'/dashboard') }}">{{ __('Appointment') }}</a>
+                        <a class="dropdown-item" href="{{ url('doctor/'.$doctor->id.'/'.Str::slug($doctor->name).'/patients') }}">{{ __('Patient') }}</a>
+                        <a class="dropdown-item" href="{{ url('doctor/'.$doctor->id.'/'.Str::slug($doctor->name).'/finance') }}">{{ __('Finance Details') }}</a>
                     </div>
                 </div>
             </div>
@@ -53,9 +53,9 @@
                             <div class="schedule-nav">
                                 <ul class="nav nav-tabs nav-justified">
                                     @foreach ($doctor->workingHours as $working)
-                                        <li class="nav-item">
-                                            <a class="nav-link {{ $loop->iteration == 1 ? 'active' : '' }}" onclick="display_timeslot({{ $working->id }})" data-toggle="tab" href="#slot_sunday">{{ $working->day_index }}</a>
-                                        </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ $loop->iteration == 1 ? 'active' : '' }}" onclick="display_timeslot({{ $working->id }})" data-toggle="tab" href="#slot_sunday">{{ $working->day_index }}</a>
+                                    </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -71,9 +71,9 @@
 
 
                                 @foreach (json_decode($doctor->firstHours->period_list) as $list)
-                                    <div class="badge badge-primary ml-2 mt-5">
-                                        {{$list->start_time}} - {{$list->end_time}}
-                                    </div>
+                                <div class="badge badge-primary ml-2 mt-5">
+                                    {{$list->start_time}} - {{$list->end_time}}
+                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -130,4 +130,3 @@
 </div>
 
 @endsection
-

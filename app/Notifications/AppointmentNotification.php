@@ -8,19 +8,22 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class AppointmentNotification extends Notification implements ShouldQueue
+class AppointmentNotification extends Notification
 {
     use Queueable;
-    public $user;
+    public $doctor;
+    public $authuser;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($doctor, $authuser)
     {
         //
-        $this->user = $user;
+        $this->doctor = $doctor;
+        $this->authuser = $authuser;
     }
 
     /**
@@ -50,7 +53,7 @@ class AppointmentNotification extends Notification implements ShouldQueue
 
     public function toSlack($notifiable)
     {
-        return (new SlackMessage)->content('Booked Appointment.');
+        return (new SlackMessage)->content($this->authuser['name'] . ' Booked Appointment');
     }
 
     /**
@@ -59,10 +62,10 @@ class AppointmentNotification extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
+    // public function toArray($notifiable)
+    // {
+    //     return [
+    //         //
+    //     ];
+    // }
 }

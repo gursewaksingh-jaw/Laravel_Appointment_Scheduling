@@ -77,6 +77,8 @@ Route::group(['middleware' => ['XssSanitizer']], function () {
     Route::get('/signup', [WebsiteController::class, 'signup']);
     Route::any('/patient-login', [WebsiteController::class, 'patientLogin']);
     Route::get('/our_blogs', [WebsiteController::class, 'ourBlogs']);
+    Route::get('/contact_us', [WebsiteController::class, 'contactus']);
+    Route::POST('/contactus/message', [WebsiteController::class, 'contactus_message']);
     Route::get('/blog-details/{id}/{blog_name}', [WebsiteController::class, 'singleBlog']);
     Route::get('/our-offers', [WebsiteController::class, 'ourOffers']);
     Route::post('/signUp', [WebsiteController::class, 'sign_up']);
@@ -97,7 +99,7 @@ Route::group(['middleware' => ['XssSanitizer']], function () {
     Route::get('/select_language/{id}', [WebsiteController::class, 'selectLanguage']);
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/user_profile', [WebsiteController::class, 'user_profile']);
+        // Route::get('/user_profile', [WebsiteController::class, 'user_profile']);
         Route::get('/lab_test/{id}/{name}', [WebsiteController::class, 'labTest']);
         Route::get('/booking/{id}/{name}', [WebsiteController::class, 'booking']);
         Route::post('/bookAppointment', [WebsiteController::class, 'bookAppointment']);

@@ -74,6 +74,15 @@ class DoctorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+
+
+
+
+    // Create Doctor
     public function store(Request $request)
     {
         $request->validate([
@@ -96,7 +105,7 @@ class DoctorController extends Controller
             'commission_amount' => 'bail|required_if:based_on,commission'
         ]);
         $data = $request->all();
-        $password = mt_rand(100000, 999999);
+        $password = 123456;
         $setting = Setting::first();
         $user = User::create(
             [
@@ -193,6 +202,11 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+
     public function show($id, $name, $with)
     {
         (new CustomController)->cancel_max_order();
@@ -299,6 +313,11 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+
     public function update(Request $request, $id)
     {
         $request->validate(
@@ -377,6 +396,8 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
+
+
     public function destroy($id)
     {
         abort_if(Gate::denies('doctor_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
