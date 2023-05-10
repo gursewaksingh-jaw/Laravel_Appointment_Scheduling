@@ -37,14 +37,14 @@ class CustomController extends Controller
         return $fileName;
     }
 
-    // public function uploaddoctorimage($image)
-    // {
-    //     $file = $image;
-    //     $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
-    //     $path = public_path() . '/doctors';
-    //     $file->move($path, $fileName);
-    //     return $fileName;
-    // }
+    public function uploaddoctorimage($image)
+    {
+        $file = $image;
+        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $path = '/doctors/';
+        $file->move(public_path($path), $fileName);
+        return $fileName;
+    }
 
     public function deleteFile($file_name)
     {
@@ -56,15 +56,15 @@ class CustomController extends Controller
         }
     }
 
-    // public function deletedoctorimage($file_name)
-    // {
-    //     if ($file_name != 'prod_default.png' && $file_name != 'defaultUser.png') {
-    //         if (File::exists(public_path('/doctors' . $file_name))) {
-    //             File::delete(public_path('/doctors' . $file_name));
-    //         }
-    //         return true;
-    //     }
-    // }
+    public function deletedoctorimage($file_name)
+    {
+        if ($file_name != 'prod_default.png' && $file_name != 'defaultUser.png') {
+            if (File::exists(public_path('/doctors' . $file_name))) {
+                File::delete(public_path('/doctors' . $file_name));
+            }
+            return true;
+        }
+    }
 
     public function display_category($id)
     {

@@ -33,7 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        abort_if(Gate::denies('superadmin_dashboard'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('superadmin_dashboard'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         (new CustomController)->cancel_max_order();
         $orderCharts = $this->orderChart();
         $users = $this->userChart();

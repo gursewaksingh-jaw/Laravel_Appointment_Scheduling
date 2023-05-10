@@ -27,6 +27,7 @@
         </p>
     </div>
     {{-- Search bar --}}
+
     <form action="{{ url('show-doctors') }}" id="searchForm" method="post">
         @csrf
         <div class="flex justify-center 2xl:flex-row xl:flex-row xlg:flex-row lg:flex-row xmd:flex-row md:flex-row sm:flex-row msm:flex-col

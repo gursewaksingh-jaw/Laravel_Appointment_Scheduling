@@ -65,14 +65,14 @@ class WebsiteController extends Controller
             [
                 'name' => 'bail|required',
                 'email' => 'bail|required|email|unique:users',
-                'dob' => 'bail|required|date_format:d/m/Y|before:' . Carbon::now(env('timezone'))->format('d/m/Y'),
+                // 'dob' => 'bail|required|date_format:d/m/Y|before:' . Carbon::now(env('timezone'))->format('d/m/Y'),
                 'gender' => 'bail|required',
                 'phone' => 'bail|required|numeric|digits_between:6,12',
                 'password' => 'bail|required|min:6'
             ],
-            [
-                'dob.before' => 'Date is invalid.',
-            ]
+            // [
+            //     'dob.before' => 'Date is invalid.',
+            // ]
         );
         $data = $request->all();
         $verification = Setting::first()->verification;
@@ -86,7 +86,8 @@ class WebsiteController extends Controller
             'phone_code' => $data['phone_code'],
             'image' => 'defaultUser.png',
             'status' => 1,
-            'dob' => Carbon::createFromFormat('d/m/Y', $data['dob'])->format('d-m-Y'),
+            'dob'=> $data['dob'],
+            // 'dob' => Carbon::createFromFormat('d/m/Y', $data['dob'])->format('d-m-Y'),
             'gender' => $data['gender']
         ]);
         Auth::loginUsingId($user->id);
@@ -679,7 +680,7 @@ class WebsiteController extends Controller
             'illness_information' => 'bail|required',
             'patient_name' => 'bail|required',
             'age' => 'bail|required|numeric',
-            'patient_address' => 'bail|required',
+            // 'patient_address' => 'bail|required',
             'phone_no' => 'bail|required|numeric',
             'drug_effect' => 'bail|required',
             'note' => 'bail|required',

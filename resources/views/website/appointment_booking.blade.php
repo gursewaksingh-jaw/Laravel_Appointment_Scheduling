@@ -163,7 +163,7 @@
                             <input type="number" min="1" name="phone_no" class="block p-2 w-full text-sm bg-white-50 border font-normal font-fira-sans leading-5 !border-white-light mt-2" required>
                         </div>
                     </div>
-
+                   @if ($setting->is_address_required == 1)
                     <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-1 md:gap-1 lg:gap-1 mt-5">
                         <div class="flex justify-between">
                             <label class="text-base font-normal font-fira-sans leading-5" for="patient_address">{{__('Address')}}</label>
@@ -178,7 +178,14 @@
                             @endforeach
                         </select>
                     </div>
-
+                    @else
+                    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-1 md:gap-1 lg:gap-1 mt-5">
+                        <div>
+                            <label class="text-base font-normal font-fira-sans leading-5 pb-2" for="patient_name">{{__('Address')}}</label>
+                            <input name="patient_address" type="text" class="block p-2 w-full text-sm bg-white-50 border font-normal font-fira-sans leading-5 !border-white-light mt-2" required>
+                        </div>
+                    </div>
+                    @endif
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mt-5">
                         <div>
                             <label class="text-base font-normal font-fira-sans leading-5 pb-2" for="drug_effect">{{__('Any Side Effects Of The Drug?')}}</label>

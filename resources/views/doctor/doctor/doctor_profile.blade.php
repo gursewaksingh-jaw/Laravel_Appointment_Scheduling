@@ -24,7 +24,8 @@
                                 <label for="image"></label>
                             </div>
                             <div class="avatar-preview">
-                                <div id="imagePreview" style="background-image: url({{ $doctor->fullImage }});">
+                                
+                                <div id="imagePreview" style="background-image:url({{ '/doctors/'.$doctor->image }});">
                                 </div>
                             </div>
                         </div>

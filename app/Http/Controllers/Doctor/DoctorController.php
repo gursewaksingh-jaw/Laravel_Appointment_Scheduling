@@ -20,7 +20,9 @@ use App\Models\User;
 use App\Models\WorkingHour;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
@@ -193,8 +195,10 @@ class DoctorController extends Controller
     public function doctor_profile()
     {
         abort_if(Gate::denies('doctor_profile'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+       
         $doctor = Doctor::where('user_id', auth()->user()->id)->first();
         $doctor->user = User::find($doctor->user_id);
+        // dd($doctor->image);
         $countries = Country::get();
         $treatments = Treatments::whereStatus(1)->get();
         $categories = Category::whereStatus(1)->get();
@@ -204,6 +208,7 @@ class DoctorController extends Controller
         $doctor['end_time'] = Carbon::parse($doctor['end_time'])->format('H:i');
         $doctor['hospital_id'] = explode(',', $doctor->hospital_id);
         $languages = Language::whereStatus(1)->get();
+
         return view('doctor.doctor.doctor_profile', compact('doctor', 'countries', 'treatments', 'hospitals', 'categories', 'expertieses', 'languages'));
     }
 
@@ -233,14 +238,61 @@ class DoctorController extends Controller
             //     'image.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
             // ]
         );
+        // dd($request->all());
         $doctor = Doctor::where('user_id', auth()->user()->id)->first();
         $data = $request->all();
         $data['start_time'] = Carbon::parse($data['start_time'])->format('h:i A');
         $data['end_time'] = Carbon::parse($data['end_time'])->format('h:i A');
+      
+        
         if ($request->hasFile('image')) {
             (new CustomController)->deletedoctorimage($doctor->image);
             $data['image'] = (new CustomController)->uploaddoctorimage($request->image);
         }
+
+        // $old_image =  $doctor['image'];
+        // dd($doctor);
+        // // dd($request->image);
+        // if ($request->hasFile('image')) {
+
+        //     if (file_exists($old_image)) {
+          
+        //         File::delete($data['image']);
+        //       }
+        //     $image = $request->file('image');
+        //     $name_gen = time() . rand(1, 999999);
+        //     $img_ext = strtolower($image->getClientOriginalExtension());
+        //     $img_client_name = strtolower($image->getClientOriginalName());
+        //     $img_name = $img_client_name  . '.' . $img_ext;
+        //     $location = '/doctors/';
+        //     $last_img = $img_name;
+        //     $image->move($location, $img_name);
+
+            
+        //     Doctor::where('id', $request->id)->update([
+        //         'image' => $last_img,
+        //     ]);
+        // }
+        // else 
+        // {
+        //     $data['image'] = $old_image;
+        // }
+
+
+
+        // $image = $request->file('image');
+        // $name_gen = time() . rand(1, 999999);
+        // $img_ext = strtolower($image->getClientOriginalExtension());
+        // $img_name = $name_gen . '.' . $img_ext;
+        // $location = public_path() . '/doctors';
+        // $last_img = $img_name;
+        // $image->move($location, $img_name);
+        // doctor::where('id', $doctor['id'])->updateOrCreate([
+        //     'image' => $last_img
+        // ]);
+        // $data['image'] = $last_img;
+
+
         $education = array();
         for ($i = 0; $i < count($data['degree']); $i++) {
             $temp['degree'] = $data['degree'][$i];
@@ -281,15 +333,15 @@ class DoctorController extends Controller
         return redirect('/doctor_home')->withStatus(__('Doctor updated successfully..!!'));
     }
 
-    // public function changeLanguage()
-    // {
-    //     $doctor = Doctor::where('user_id', auth()->user()->id)->first();
-    //     App::setLocale($doctor->language);
-    //     session()->put('locale', $doctor->language);
-    //     $direction = Language::where('name', $doctor->language)->first()->direction;
-    //     session()->put('direction', $direction);
-    //     return true;
-    // }
+    public function changeLanguage()
+    {
+        $doctor = Doctor::where('user_id', auth()->user()->id)->first();
+        App::setLocale($doctor->language);
+        session()->put('locale', $doctor->language);
+        $direction = Language::where('name', $doctor->language)->first()->direction;
+        session()->put('direction', $direction);
+        return true;
+    }
 
     public function changePassword()
     {
