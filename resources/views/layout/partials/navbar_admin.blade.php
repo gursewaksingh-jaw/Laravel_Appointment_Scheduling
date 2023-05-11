@@ -1,5 +1,6 @@
 @php
 $app_logo = App\Models\Setting::first();
+$notifications = App\Models\RegisterNotification::get();
 @endphp
 @if (auth()->user()->hasRole('super admin'))
 <nav class="navbar navbar-expand-lg main-navbar " style="background-color:#19376D;">
@@ -13,30 +14,23 @@ $app_logo = App\Models\Setting::first();
     </form>
     <ul class="navbar-nav navbar-right">
         <li class="notification">
-            <div class="number"> <small class="notification-count">2</small></div>
+            <div class="number"> <small class="notification-count">{{$notifications->count()}}</small></div>
             <div class="notBtn " href="#">
                 <i class="fas fa-bell text-white"></i>
                 <div class="box">
                     <div class="display">
                         <div class="cont">
+                            @foreach($notifications as $notification)
                             <div class="sec new">
                                 <a href="https://codepen.io/Golez/">
                                     <div class="profCont">
                                         <img class="profile" src="https://c1.staticflickr.com/5/4007/4626436851_5629a97f30_b.jpg">
                                     </div>
-                                    <div class="txt">James liked your post: "Pure css notification box"</div>
+                                    <div class="txt">{{ $notification->message}}</div>
                                     <div class="txt sub">11/7 - 2:30 pm</div>
                                 </a>
                             </div>
-                            <div class="sec new">
-                                <a href="https://codepen.io/Golez/">
-                                    <div class="profCont">
-                                        <img class="profile" src="https://obamawhitehouse.archives.gov/sites/obamawhitehouse.archives.gov/files/styles/person_medium_photo/public/person-photo/amanda_lucidon22.jpg?itok=JFPi8OFJ">
-                                    </div>
-                                    <div class="txt">Annita liked your post: "Pure css notification box"</div>
-                                    <div class="txt sub">11/7 - 2:13 pm</div>
-                                </a>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -177,6 +171,7 @@ $app_logo = App\Models\Setting::first();
     <ul class="navbar-nav navbar-right">
         <div class="mt-5">
             @php
+
             $languages = App\Models\Language::where('status',1)->get();
             $icon = \App\Models\Language::where('name',session('locale'))->first();
             if($icon)
@@ -189,6 +184,29 @@ $app_logo = App\Models\Setting::first();
             }
             @endphp
         </div>
+        <li class="notification">
+            <div class="number"> <small class="notification-count">2</small></div>
+            <div class="notBtn " href="#">
+                <i class="fas fa-bell text-white"></i>
+                <div class="box">
+                    <div class="display">
+                        <div class="cont">
+                            <div class="sec new">
+                                {{$notifications}}
+                                <a href="https://codepen.io/Golez/">
+                                    <div class="profCont">
+                                        <img class="profile" src="https://c1.staticflickr.com/5/4007/4626436851_5629a97f30_b.jpg">
+                                    </div>
+                                    <div class="txt">James liked your post: "Pure css notification box"</div>
+                                    <div class="txt sub">11/7 - 2:30 pm</div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
         <li class="dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <div class="d-sm-none d-lg-inline-block" style="font-size:18px;">{{ auth()->user()->name }}</div>
             </a>

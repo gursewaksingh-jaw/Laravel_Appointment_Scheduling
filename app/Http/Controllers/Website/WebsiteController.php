@@ -45,6 +45,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\AppointmentNotification;
+use App\Notifications\RegisterNotification;
 use Spatie\Permission\Models\Role;
 use App\Models\ContactUs;
 
@@ -63,6 +64,16 @@ class WebsiteController extends Controller
         $blogs = Blog::get();
         return view('website.home', compact('banners', 'doctors', 'treatments', 'setting', 'reviews', 'blogs'));
     }
+
+
+
+
+
+
+
+
+
+
 
     public function sign_up(Request $request)
     {
@@ -95,14 +106,29 @@ class WebsiteController extends Controller
             'gender' => $data['gender']
         ]);
         Auth::loginUsingId($user->id);
-
         if ($user->verify) {
+            $authuser = auth()->user()->id;
+            $admin = User::where('user_type', '0')->first();
+            $admin->notify(new RegisterNotification($authuser));
             return redirect('/');
         } else {
             Session::put('verified_user', $user);
             return redirect('send_otp');
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Doctor Register
     public function doctorRegister(Request $request)
