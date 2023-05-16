@@ -241,4 +241,22 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'message' => $error]);
         }
     }
+
+    public function superAdmin_changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_new_password' => 'required|same:new_password',
+        ]);
+        $data = $request->all();
+        $id = auth()->user();
+        if (Hash::check($data['old_password'], $id->password) == true) {
+            $id->password = Hash::make($data['new_password']);
+            $id->save();
+            return redirect()->back()->withStatus(__('Password Changed Successfully.'));
+        } else {
+            return redirect()->back()->with('error', 'old password does not match');
+        }
+    }
 }

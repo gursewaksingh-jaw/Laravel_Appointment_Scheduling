@@ -52,34 +52,34 @@
             <div class="d-flex align-items-center login avtar-wrapper order-xl-3 order-4 dropdown ms-auto">
 
                 @if (auth()->check())
-                    <a class="nav-link menu-link drop-link dropdown-toggle more-drop" href="javascript:void(0)" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ url('images/upload/'.auth()->user()->image) }}" class="rounded-circle avtar" alt="">
-                    </a>
-                    <ul class="dropdown-menu u-d profile-detail" aria-labelledby="offcanvasNavbarDropdown">
-                        <li class="dropdown-item d-flex align-items-center">
-                            <img src="{{ url('images/upload/'.auth()->user()->image) }}" class="rounded-circle avtar me-2" alt="">
-                            <div>
-                                <p>{{ auth()->user()->name }}</p>
-                                <p class="text-muted">{{ __('Patient') }}</p>
-                            </div>
-                        </li>
-                        <li><a class="dropdown-item " href="{{ url('user_profile') }}">{{ __('Dashboard') }}</a>
-                        </li>
-                        <li><a class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" href="javascript:void(0)">{{ __('logout') }}</a></li>
-                    </ul>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
+                <a class="nav-link menu-link drop-link dropdown-toggle more-drop" href="javascript:void(0)" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{ url('images/upload/'.auth()->user()->image) }}" class="rounded-circle avtar" alt="">
+                </a>
+                <ul class="dropdown-menu u-d profile-detail" aria-labelledby="offcanvasNavbarDropdown">
+                    <li class="dropdown-item d-flex align-items-center">
+                        <img src="{{ url('images/upload/'.auth()->user()->image) }}" class="rounded-circle avtar me-2" alt="">
+                        <div>
+                            <p>{{ auth()->user()->name }}</p>
+                            <p class="text-muted">{{ __('Patient') }}</p>
+                        </div>
+                    </li>
+                    <li><a class="dropdown-item " href="{{ url('user_profile') }}">{{ __('Dashboard') }}</a>
+                    </li>
+                    <li><a class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" href="javascript:void(0)">{{ __('logout') }}</a></li>
+                </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
                 @else
-                    <ul class="navbar-nav menubar  align-items-xl-center flex-grow-1 ">
-                        <li class="nav-item dropdown ms-xl-auto">
-                            <a class="nav-link drop-link menu-link dropdown-toggle more-drop" href="javascript:void(0)" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('For Providers') }}</a>
-                            <ul class="dropdown-menu u-d" aria-labelledby="offcanvasNavbarDropdown">
-                                <li><a class="dropdown-item" target="_blank" href="{{ url('doctor/doctor_login') }}">{{ __('Login For Doctors') }}</a></li>
-                                <li><a class="dropdown-item" href="{{ url('patient-login') }}">{{ __('Login For Patients') }}</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <ul class="navbar-nav menubar  align-items-xl-center flex-grow-1 ">
+                    <li class="nav-item dropdown ms-xl-auto">
+                        <a class="nav-link drop-link menu-link dropdown-toggle more-drop" href="javascript:void(0)" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ __('For Providers') }}</a>
+                        <ul class="dropdown-menu u-d" aria-labelledby="offcanvasNavbarDropdown">
+                            <li><a class="dropdown-item" target="_blank" href="{{ url('doctor/doctor_login') }}">{{ __('Login For Doctors') }}</a></li>
+                            <li><a class="dropdown-item" href="{{ url('patient-login') }}">{{ __('Login For Patients') }}</a></li>
+                        </ul>
+                    </li>
+                </ul>
                 @endif
                 <div class="mt-5">
                     @php
@@ -87,29 +87,29 @@
                     $icon = \App\Models\Language::where('name',session('locale'))->first();
                     if($icon)
                     {
-                        $lang_image = $icon->image;
+                    $lang_image = $icon->image;
                     }
                     else
                     {
-                        $lang_image = "english.png";
+                    $lang_image = "english.png";
                     }
                     @endphp
                 </div>
                 <div class="dropdown">
-                    <a class="nav-link menu-link drop-link dropdown-toggle more-drop" href="javascript:void(0);"  id="dropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                    <a class="nav-link menu-link drop-link dropdown-toggle more-drop" href="javascript:void(0);" id="dropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="d-sm-none d-lg-inline-block"></div>
-                        <img class="rounded" src="{{asset('/images/upload/'.$lang_image)}}"  style="width:40px; height:40px;">
+                        <img class="rounded" src="{{asset('/images/upload/'.$lang_image)}}" style="width:40px; height:40px;">
                     </a>
                     <ul class="dropdown-menu u-d" aria-labelledby="dropdownMenuLink" style="position: absolute">
                         @foreach ($languages as $language)
-                            <a href="{{ url('/change_language/'.$language->id) }}" class="dropdown-item d-flex justify-content-between">
-                                <div class="dropdown-item-avatar">
+                        <a href="{{ url('/change_language/'.$language->id) }}" class="dropdown-item d-flex justify-content-between">
+                            <div class="dropdown-item-avatar">
                                 <img width="50px" height="30px" alt="image" src="{{asset('/images/upload/'.$language->image)}}" class="rounded">
-                                </div>
-                                <div class="dropdown-item-desc">
+                            </div>
+                            <div class="dropdown-item-desc">
                                 <b>{{ $language->name }}</b>
-                                </div>
-                            </a>
+                            </div>
+                        </a>
                         @endforeach
                     </ul>
                 </div>

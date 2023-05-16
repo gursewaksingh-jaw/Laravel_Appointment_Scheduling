@@ -61,7 +61,7 @@ class User extends Authenticatable
     protected $appends = ['fullImage'];
     public function routeNotificationForSlack()
     {
-        return 'https://hooks.slack.com/services/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';
+        return 'https://hooks.slack.com/services/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';
     }
 
     protected function getFullImageAttribute()

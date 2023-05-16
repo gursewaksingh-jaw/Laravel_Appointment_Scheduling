@@ -477,9 +477,9 @@ class WebsiteController extends Controller
 
     public function downloadPDF($id)
     {
-        $id = Prescription::find($id);
-        $pathToFile = public_path() . "/prescription/upload/" . $id->pdf;
-        $name = $id->pdf;
+        $ids = Prescription::where('appointment_id', $id)->first();
+        $pathToFile = public_path() . "/prescription/upload/" . $ids->pdf;
+        $name = $ids->pdf;
         $headers = array('Content-Type: application/pdf',);
         return response()->download($pathToFile, $name, $headers);
     }

@@ -37,6 +37,7 @@
                 </div>
             </div>
         </div>
+        <h1></h1>
         <div class="col-xl-4 col-sm-6 col-12">
             <div class="card card-statistic-1">
                 <div class="card-icon bg-warning">
@@ -75,7 +76,6 @@
                                     <th>{{__('date')}}</th>
                                     <th>{{__('payment status')}}</th>
                                     <th>{{__('status')}}</th>
-                                    <th>{{__('change status')}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,20 +104,6 @@
                                         @endif
                                         @if($appointment->appointment_status == 'completed' || $appointment->appointment_status == 'COMPLETED' || $appointment->appointment_status == 'complete' || $appointment->appointment_status == 'Complete')
                                         <span class="badge badge-pill bg-default-light">{{__('Completed')}}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($appointment->appointment_status == 'approved' || $appointment->appointment_status == 'APPROVED' || $appointment->appointment_status == 'Approve' || $appointment->appointment_status == 'Approved' || $appointment->appointment_status == 'approve' || $appointment->appointment_status == 'completed' || $appointment->appointment_status == 'complete' || $appointment->appointment_status == 'Complete')
-                                        <a href="{{ url('completeAppointment/'.$appointment->id) }}" class="btn btn-sm bg-info-light {{ $appointment->appointment_status == 'completed' || $appointment->appointment_status == 'complete'  ? 'disabled' : '' }}">
-                                            <i class="fas fa-check"></i> {{__('Completed')}}
-                                        </a>
-                                        @elseif($appointment->appointment_status == 'pending' || $appointment->appointment_status == 'canceled' || $appointment->appointment_status == 'cancel')
-                                        <a href="{{ url('acceptAppointment/'.$appointment->id) }}" class="btn btn-sm bg-success-light {{ $appointment->appointment_status != 'pending' ? 'disabled' : '' }}">
-                                            <i class="fas fa-check"></i> {{__('Accept')}}
-                                        </a>
-                                        <a href="{{ url('cancelAppointment/'.$appointment->id) }}" class="btn btn-sm bg-danger-light {{ $appointment->appointment_status != 'pending' ? 'disabled' : '' }}">
-                                            <i class="fas fa-times"></i>{{__('Cancel')}}
-                                        </a>
                                         @endif
                                     </td>
                                 </tr>

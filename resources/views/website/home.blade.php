@@ -128,9 +128,9 @@
                     <h5 class="font-fira-sans font-normal text-lg leading-6 text-black text-center md:text-md pt-5">
                         {{ $doctor->name }}
                     </h5>
-                    <p class="font-normal leading-4 text-sm text-primary text-center font-fira-sans md:text-md py-2">
+                    {{--<p class="font-normal leading-4 text-sm text-primary text-center font-fira-sans md:text-md py-2">
                         {{$doctor['expertise']['name'] }}
-                    </p>
+                    </p> --}}
                     <p class="font-normal leading-4 text-sm text-gray text-center md:text-md"><i class="fa-solid fa-star text-yellow"></i> {{ $doctor['rate'] }} ({{$doctor['review'] }} {{
                  __('reviews') }})</p>
                 </div>

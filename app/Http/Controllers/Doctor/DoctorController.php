@@ -238,8 +238,8 @@ class DoctorController extends Controller
         $data['start_time'] = Carbon::parse($data['start_time'])->format('h:i A');
         $data['end_time'] = Carbon::parse($data['end_time'])->format('h:i A');
         if ($request->hasFile('image')) {
-            (new CustomController)->deletedoctorimage($doctor->image);
-            $data['image'] = (new CustomController)->uploaddoctorimage($request->image);
+            (new CustomController)->deleteFile($doctor->image);
+            $data['image'] = (new CustomController)->imageUpload($request->image);
         }
         $education = array();
         for ($i = 0; $i < count($data['degree']); $i++) {
@@ -306,5 +306,23 @@ class DoctorController extends Controller
         // $reviews = Review::with(['appointment:id,appointment_id', 'user:id,name'])->where('doctor_id', $doctor->id)->get();
         // 'appointment', 'appointment.id', '=', 'prescription.appointment_id'
         return view('doctor.doctor.review', compact('reviews'));
+    }
+    public function adminchange_password(Request $request)
+    {
+
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required',
+            'confirm_new_password' => 'required|same:new_password',
+        ]);
+        $data = $request->all();
+        $id = auth()->user();
+        if (Hash::check($data['old_password'], $id->password) == true) {
+            $id->password = Hash::make($data['new_password']);
+            $id->save();
+            return redirect()->back()->withStatus(__('Password Changed Successfully.'));
+        } else {
+            return redirect()->back()->with('error', 'old password does not match');
+        }
     }
 }

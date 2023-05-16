@@ -35,6 +35,6 @@ class ConfirmAppointment extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from TWS Doctro')->view('emails.confirmappointment');
+        return $this->subject('Appointment Approved')->view('emails.confirmappointment');
     }
 }

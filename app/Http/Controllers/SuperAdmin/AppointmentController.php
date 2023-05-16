@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmAppointment;
+use App\Notifications\DoctortoUserNotification;
+use App\Notifications\UserNotification;
 use Illuminate\Support\Facades\Session;
 
 class AppointmentController extends Controller
@@ -121,16 +123,28 @@ class AppointmentController extends Controller
         return response(['success' => true, 'data' => $settle, 'currency' => $currency]);
     }
 
+
+
+
+
+
+    // Mail::to('akash7@mailinator.com')->send(new ConfirmAppointment($doctorname, $patientname, $slot));
+    // /* Accept Appointment */
+    // {{--$patient->notify(new DoctortoUserNotification($doctorname, $patientname));--}}
     public function acceptAppointment($appointment_id)
     {
-        $doctorname = auth()->user()->id;
+        $doctorname = auth()->user()->name;
         $slot = Appointment::where('id', $appointment_id)->first();
-        $patientname = User::where('id', $slot->user_id)->get();
+        $patient = User::where('id', $slot->user_id)->first();
+        $patientname = $patient->name;
         Appointment::find($appointment_id)->update(['appointment_status' => 'approve']);
         $this->notificationChange($appointment_id, 'Accept');
-        Mail::to('akash7@mailinator.com')->send(new ConfirmAppointment($patientname, $patientname, $slot));
+        $patient->notify(new UserNotification($doctorname));
         return back()->with('status', __('status change successfully...!!'));
     }
+
+
+
 
     public function cancelAppointment($appointment_id)
     {
