@@ -78,9 +78,9 @@
                                 @if (auth()->user()->hasRole('doctor'))
                                 <th>{{__('Add prescription')}}</th>
                                 @endif
-                                @if (auth()->user()->hasRole('doctor'))
+                                <!-- @if (auth()->user()->hasRole('doctor'))
                                 <th>{{__('Create Zoom Meeting')}}</th>
-                                @endif
+                                @endif -->
                             </tr>
                         </thead>
                         <tbody class="text-center">
@@ -174,10 +174,6 @@
                                 @endif
 
 
-
-
-
-
                                 @if (auth()->user()->hasRole('doctor'))
                                 @if ($appointment->prescription == 0)
                                 <td>
@@ -193,11 +189,11 @@
                                 </td>
                                 @endif
                                 @endif
-                                @if (auth()->user()->hasRole('doctor'))
+                                <!-- @if (auth()->user()->hasRole('doctor'))
                                 <td>
                                     <a href="{{url('create_zoom_metting/'.$appointment->id)}}">{{__('Create Metting')}}</a>
                                 </td>
-                                @endif
+                                @endif -->
                             </tr>
                             @endforeach
                         </tbody>

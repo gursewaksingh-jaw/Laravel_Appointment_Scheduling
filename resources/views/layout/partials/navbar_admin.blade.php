@@ -13,7 +13,7 @@ $notifications = App\Models\RegisterNotification::get();
         @csrf
     </form>
     <ul class="navbar-nav navbar-right">
-        <li class="notification">
+        <!-- <li class="notification">
             <div class="number"> <small class="notification-count">{{$notifications->count()}}</small></div>
             <div class="notBtn " href="#">
                 <i class="fas fa-bell text-white"></i>
@@ -35,7 +35,7 @@ $notifications = App\Models\RegisterNotification::get();
                     </div>
                 </div>
             </div>
-        </li>
+        </li> -->
         <li class="dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <div class="d-sm-none d-lg-inline-block">{{ auth()->user()->name }}</div>
             </a>
@@ -158,6 +158,16 @@ $notifications = App\Models\RegisterNotification::get();
 
 
 
+
+
+
+
+
+
+
+
+
+
 @elseif(auth()->user()->hasRole('doctor'))
 <nav class="navbar navbar-expand-lg main-navbar" style="background-color:#0B2447; padding:2rem;">
     <form class="form-inline mr-auto">
@@ -184,7 +194,7 @@ $notifications = App\Models\RegisterNotification::get();
             }
             @endphp
         </div>
-        <li class="notification">
+        <!-- <li class="notification">
             <div class="number"> <small class="notification-count">2</small></div>
             <div class="notBtn " href="#">
                 <i class="fas fa-bell text-white"></i>
@@ -206,7 +216,7 @@ $notifications = App\Models\RegisterNotification::get();
                     </div>
                 </div>
             </div>
-        </li>
+        </li> -->
         <li class="dropdown"><a href="javascript:void(0)" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <div class="d-sm-none d-lg-inline-block" style="font-size:18px;">{{ auth()->user()->name }}</div>
             </a>

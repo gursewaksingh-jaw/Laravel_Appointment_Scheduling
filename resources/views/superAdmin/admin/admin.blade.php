@@ -6,12 +6,12 @@
 <section class="section">
 
     @include('layout.breadcrumb',[
-        'title' => __('Admin Profile'),
+    'title' => __('Admin Profile'),
     ])
 
     @if (session('status'))
     @include('superAdmin.auth.status',[
-        'status' => session('status')])
+    'status' => session('status')])
     @endif
     <div class="card">
         <div class="card-body">
@@ -34,9 +34,9 @@
                                 </div>
                             </div>
                             @error('image')
-                                <div class="custom_error">
-                                    {{ $message }}
-                                </div>
+                            <div class="custom_error">
+                                {{ $message }}
+                            </div>
                             @enderror
                         </div>
                     </div>
@@ -68,7 +68,7 @@
             <strong>{{__('change password')}}</strong>
         </div>
         <div class="card-body">
-            <form action="{{ url('change_password') }}" method="post" enctype="multipart/form-data" class="myform">
+            <form action="{{ url('super_admin_change_password') }}" method="post" enctype="multipart/form-data" class="myform">
                 @csrf
                 <div class="form-group">
                     <label class="col-form-label">{{__('Old password')}}</label>
@@ -98,12 +98,12 @@
                     @enderror
                 </div>
                 <div class="row">
-                <div class="col-md-12 text-right">
-                    <input type="submit" value="{{__('submit')}}" class="btn btn-primary">
-                </div>
+                    <div class="col-md-12 text-right">
+                        <input type="submit" value="{{__('submit')}}" class="btn btn-primary">
+                    </div>
             </form>
-            </div>
         </div>
+    </div>
     </div>
 </section>
 

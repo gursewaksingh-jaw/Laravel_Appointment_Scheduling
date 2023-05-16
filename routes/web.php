@@ -286,6 +286,7 @@ Route::group(['middleware' => ['XssSanitizer']], function () {
         Route::get('profile', [AdminController::class, 'profile']);
         Route::post('update_profile', [AdminController::class, 'update_profile']);
         Route::post('change_password', [AdminController::class, 'change_password']);
+        Route::Post('super_admin_change_password', [AdminController::class, 'superAdmin_changePassword']);
 
         // subscription history
         Route::get('subscription_history', [SubscriptionController::class, 'subscription_history']);
@@ -364,6 +365,7 @@ Route::group(['middleware' => ['XssSanitizer']], function () {
         Route::get('/doctor_profile', [App\Http\Controllers\Doctor\DoctorController::class, 'doctor_profile']);
         Route::post('/update_doctor_profile', [App\Http\Controllers\Doctor\DoctorController::class, 'update_doctor_profile']);
         Route::get('/changePassword', [App\Http\Controllers\Doctor\DoctorController::class, 'changePassword']);
+        Route::Post('/adminchange_passoword', [App\Http\Controllers\Doctor\DoctorController::class, 'adminchange_password']);
 
         // change subscriptiom payment status changePaymentStatus
         Route::get('subscription/changePaymentStatus/{id}', [SubscriptionController::class, 'changePaymentStatus']);
