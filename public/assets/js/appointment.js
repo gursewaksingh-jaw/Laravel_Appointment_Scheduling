@@ -750,9 +750,21 @@ function payStack() {
     handler.openIframe();
 }
 
+
+
+
+
+
+
+
+
+
+
+
 function booking() {
     var formData = new FormData($('#appointmentForm')[0]);
     var time = formData.getAll('time');
+    console.warn("Form Data ", formData);
     if (time.length > 0) {
         formData.delete('time');
         formData.append('time', time[0]);
@@ -769,7 +781,21 @@ function booking() {
         processData: false,
         success: function (result) {
             if (result.success == true) {
-                location.replace(base_url + '/user_profile');
+                console.log('checking success message');
+
+                // alert('congratulations');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Congratulations !',
+                    text: "Payment Successfull",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.replace(base_url + '/user_profile');
+                    }
+                    else {
+                        alert('Payment cancel');
+                    }
+                })
             }
             else {
                 Swal.fire({
@@ -790,6 +816,12 @@ function booking() {
         }
     });
 }
+
+
+
+
+
+
 
 // add selected class
 function thisTime(i) {

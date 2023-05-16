@@ -3,7 +3,6 @@
 @section('title',__('Doctor login'))
 
 @section('content')
-
 <section class="section">
     <div class="d-flex flex-wrap align-items-stretch">
         <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
@@ -11,7 +10,7 @@
                 @php
                 $app_logo = App\Models\Setting::first();
                 @endphp
-                <img src="{{asset('/logo/twslogo.png')}}" alt="logo" width="120" class="mb-5 mt-2">
+                <img src="{{ $app_logo->logo }}" alt="logo" width="120" class="mb-5 mt-2">
                 @if ($errors->any())
                 @foreach ($errors->all() as $item)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">

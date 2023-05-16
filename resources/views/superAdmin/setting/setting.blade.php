@@ -10,11 +10,11 @@
     ])
     @if (session('status'))
     @include('superAdmin.auth.status',[
-        'status' => session('status')])
+    'status' => session('status')])
     @endif
     @if (session('error_msg'))
     @include('superAdmin.auth.status',[
-        'status' => session('error_msg')])
+    'status' => session('error_msg')])
     @endif
 
     <div class="row">
@@ -26,18 +26,17 @@
                         <li class="nav-item"><a class="nav-link active" href="#solid-justified-tab1" data-toggle="tab">{{__('General Settings')}}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#solid-justified-tab2" data-toggle="tab">{{__('Payment setting')}}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#solid-justified-tab3" data-toggle="tab">{{__('verification')}}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#solid-justified-tab5" data-toggle="tab">{{__('Website Setting')}}</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="#solid-justified-tab5" data-toggle="tab">{{__('Website Setting')}}</a></li> -->
                         <li class="nav-item"><a class="nav-link" href="#solid-justified-tab6" data-toggle="tab">{{__('Notification Setting')}}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#solid-justified-tab8" data-toggle="tab">{{__('Static Pages')}}</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#solid-justified-tab9" data-toggle="tab">{{__('Video Call Setting')}}</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="#solid-justified-tab9" data-toggle="tab">{{__('Video Call Setting')}}</a></li> -->
                         @endif
-                        <li class="nav-item"><a class="nav-link {{ $setting->license_verify == 0 ? 'active' : ''  }}" href="#solid-justified-tab7" data-toggle="tab">{{__('License Setting')}}</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link {{ $setting->license_verify == 0 ? 'active' : ''  }}" href="#solid-justified-tab7" data-toggle="tab">{{__('License Setting')}}</a></li> -->
                     </ul>
                     <div class="tab-content mt-3">
                         @if($setting->license_verify == 1)
                         <div class="tab-pane show active" id="solid-justified-tab1">
-                            <form action="{{url('update_general_setting')}}" method="POST"
-                                enctype="multipart/form-data" class="myform">
+                            <form action="{{url('update_general_setting')}}" method="POST" enctype="multipart/form-data" class="myform">
                                 @csrf
 
                                 <div class="row">
@@ -45,13 +44,11 @@
                                         <label for="app_id" class="ul-form__label"> {{__('Company white logo')}}</label>
                                         <div class="avatar-upload avatar-box avatar-box-left">
                                             <div class="avatar-edit">
-                                                <input type='file' id="image" name="company_white_logo"
-                                                    accept=".png, .jpg, .jpeg" />
+                                                <input type='file' id="image" name="company_white_logo" accept=".png, .jpg, .jpeg" />
                                                 <label for="image"></label>
                                             </div>
                                             <div class="avatar-preview">
-                                                <div id="imagePreview"
-                                                    style="background-image: url({{ $setting->companyWhite }});">
+                                                <div id="imagePreview" style="background-image: url({{ $setting->companyWhite }});">
                                                 </div>
                                             </div>
                                         </div>
@@ -65,13 +62,11 @@
                                         <label for="app_id" class="col-form-label"> {{__('Company logo')}}</label>
                                         <div class="avatar-upload avatar-box avatar-box-left">
                                             <div class="avatar-edit">
-                                                <input type='file' id="image2" name="company_logo"
-                                                    accept=".png, .jpg, .jpeg" />
+                                                <input type='file' id="image2" name="company_logo" accept=".png, .jpg, .jpeg" />
                                                 <label for="image2"></label>
                                             </div>
                                             <div class="avatar-preview">
-                                                <div id="imagePreview2"
-                                                    style="background-image: url({{ $setting->logo }});">
+                                                <div id="imagePreview2" style="background-image: url({{ $setting->logo }});">
                                                 </div>
                                             </div>
                                         </div>
@@ -86,13 +81,11 @@
                                         <label for="app_id" class="col-form-label"> {{__('Company favicon')}}</label>
                                         <div class="avatar-upload avatar-box avatar-box-left">
                                             <div class="avatar-edit">
-                                                <input type='file' id="image3" name="company_favicon"
-                                                    accept=".png, .jpg, .jpeg" />
+                                                <input type='file' id="image3" name="company_favicon" accept=".png, .jpg, .jpeg" />
                                                 <label for="image3"></label>
                                             </div>
                                             <div class="avatar-preview">
-                                                <div id="imagePreview3"
-                                                    style="background-image: url({{ $setting->favicon }});">
+                                                <div id="imagePreview3" style="background-image: url({{ $setting->favicon }});">
                                                 </div>
                                             </div>
                                         </div>
@@ -108,9 +101,7 @@
                                     <div class="col-md-4 form-group">
                                         <label for="business_name" class="col-form-label"> {{__('Business
                                             Name')}}</label>
-                                        <input type="text" required name="business_name"
-                                            value="{{ $setting->business_name }}"
-                                            class="form-control @error('business_name') is-invalid @enderror">
+                                        <input type="text" required name="business_name" value="{{ $setting->business_name }}" class="form-control @error('business_name') is-invalid @enderror">
                                         @error('business_name')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -119,8 +110,7 @@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label for="email" class="col-form-label"> {{__('Email')}}</label>
-                                        <input type="email" required name="email" value="{{ $setting->email }}"
-                                            class="form-control @error('email') is-invalid @enderror">
+                                        <input type="email" required name="email" value="{{ $setting->email }}" class="form-control @error('email') is-invalid @enderror">
                                         @error('email')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -129,8 +119,7 @@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label for="phone" class="col-form-label"> {{__('Phone number')}}</label>
-                                        <input type="number" min="1" required name="phone" value="{{ $setting->phone }}"
-                                            class="form-control @error('phone') is-invalid @enderror">
+                                        <input type="number" min="1" required name="phone" value="{{ $setting->phone }}" class="form-control @error('phone') is-invalid @enderror">
                                         @error('phone')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -141,8 +130,7 @@
                                 <div class="row mt-5">
                                     <div class="col-md-6 form-group">
                                         <label for="app_id" class="col-form-label"> {{__('Admin Color')}}</label>
-                                        <input type="color" required value="{{ $setting->color }}" name="color"
-                                            class="form-control @error('color') is-invalid @enderror">
+                                        <input type="color" required value="{{ $setting->color }}" name="color" class="form-control @error('color') is-invalid @enderror">
                                         @error('color')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -151,9 +139,7 @@
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label for="app_id" class="col-form-label"> {{__('Website Color')}}</label>
-                                        <input type="color" required value="{{ $setting->website_color }}"
-                                            name="website_color"
-                                            class="form-control @error('website_color') is-invalid @enderror">
+                                        <input type="color" required value="{{ $setting->website_color }}" name="website_color" class="form-control @error('website_color') is-invalid @enderror">
                                         @error('website_color')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -164,9 +150,7 @@
                                 <div class="form-group">
                                     <label for="app_id" class="col-form-label"> {{__('Order Cancel Thresold By Doctor(In
                                         Minutes)')}}</label>
-                                    <input type="number" min=1 required value="{{ $setting->auto_cancel }}"
-                                        name="auto_cancel"
-                                        class="form-control @error('auto_cancel') is-invalid @enderror">
+                                    <input type="number" min=1 required value="{{ $setting->auto_cancel }}" name="auto_cancel" class="form-control @error('auto_cancel') is-invalid @enderror">
                                     @error('auto_cancel')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -201,8 +185,7 @@
                                 <div class="row mt-5">
                                     <div class="col-md-6 form-group">
                                         <label for="radius" class="col-form-label"> {{__("Radius")}}</label>
-                                        <input type="number" min="1" name="radius" class="radius form-control"
-                                            value="{{ $setting->radius }}">
+                                        <input type="number" min="1" name="radius" class="radius form-control" value="{{ $setting->radius }}">
                                         @error('radius')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -245,9 +228,7 @@
                                     <div class="col-md-6 form-group">
                                         <label for="pharmacy_commission" class="col-form-label">{{__("pharmacy admin
                                             register with app it's commission ?")}}</label>
-                                        <input type="number" min="1" name="pharmacy_commission" required
-                                            value="{{ $setting->pharmacy_commission }}"
-                                            class="form-control @error('pharmacy_commission') is-invalid @enderror">
+                                        <input type="number" min="1" name="pharmacy_commission" required value="{{ $setting->pharmacy_commission }}" class="form-control @error('pharmacy_commission') is-invalid @enderror">
                                         @error('pharmacy_commission')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -258,9 +239,7 @@
                                     <div class="col-md-6 form-group">
                                         <label for="pathologist_commission" class="col-form-label">{{__("pathologist
                                             register with app it's commission ?")}}</label>
-                                        <input type="number" min="1" name="pathologist_commission" required
-                                            value="{{ $setting->pathologist_commission }}"
-                                            class="form-control @error('pathologist_commission') is-invalid @enderror">
+                                        <input type="number" min="1" name="pathologist_commission" required value="{{ $setting->pathologist_commission }}" class="form-control @error('pathologist_commission') is-invalid @enderror">
                                         @error('pathologist_commission')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -270,13 +249,11 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
-                                        <div
-                                            class="form-group default_base_on_com {{$setting->default_base_on != 'commission' ? 'hide' : ''}}">
+                                        <div class="form-group default_base_on_com {{$setting->default_base_on != 'commission' ? 'hide' : ''}}">
                                             <label for="default_commission" class="col-form-label"> {{__("commission (in
                                                 %)")}}</label>
                                             <input type="number" min="1" name="default_commission" {{$setting->default_base_on
-                                            == 'commission' ? 'required' : ''}} value="{{ $setting->default_commission }}"
-                                            class="form-control @error('default_commission') is-invalid @enderror
+                                            == 'commission' ? 'required' : ''}} value="{{ $setting->default_commission }}" class="form-control @error('default_commission') is-invalid @enderror
                                             default_base_on_com_text">
                                             @error('default_commission')
                                             <div class="invalid-feedback">
@@ -288,12 +265,10 @@
                                     <div class="col-md-6 form-group">
                                         <div class="form-group">
                                             <label for="map_key" class="col-form-label"> {{__('Google map key')}}</label>
-                                            <a href="https://developers.google.com/maps/documentation" target="_blank" class=""
-                                                data-toggle="tooltip" data-placement="top" title="Help">
+                                            <a href="https://developers.google.com/maps/documentation" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                                             </a>
-                                            <input type="text" required name="map_key" value="{{ $setting->map_key }}"
-                                                class="form-control @error('map_key') is-invalid @enderror">
+                                            <input type="text" required name="map_key" value="{{ $setting->map_key }}" class="form-control @error('map_key') is-invalid @enderror">
                                             @error('map_key')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
@@ -305,9 +280,7 @@
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label for="lat" class="col-form-label">{{__("Latitude")}}</label>
-                                        <input type="text" name="lat" required
-                                            value="{{ $setting->lat }}"
-                                            class="form-control @error('lat') is-invalid @enderror">
+                                        <input type="text" name="lat" required value="{{ $setting->lat }}" class="form-control @error('lat') is-invalid @enderror">
                                         @error('lat')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -317,9 +290,7 @@
 
                                     <div class="col-md-6 form-group">
                                         <label for="lang" class="col-form-label">{{__("Longitude")}}</label>
-                                        <input type="text" name="lang" required
-                                            value="{{ $setting->lang }}"
-                                            class="form-control @error('lang') is-invalid @enderror">
+                                        <input type="text" name="lang" required value="{{ $setting->lang }}" class="form-control @error('lang') is-invalid @enderror">
                                         @error('lang')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -336,8 +307,7 @@
                                                     {{__('Add reason')}}
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="add_cancel_reason()">
+                                                    <button type="button" class="btn btn-primary" onclick="add_cancel_reason()">
                                                         <i class="fas fa-plus"></i>
                                                     </button>
                                                 </td>
@@ -433,7 +403,7 @@
                                     <a href="https://stripe.com/docs/keys#obtain-api-keys" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->stripe_public_key }}"  name="stripe_public_key" class="hide_value form-control @error('stripe_public_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->stripe_public_key }}" name="stripe_public_key" class="hide_value form-control @error('stripe_public_key') is-invalid @enderror">
                                     @error('stripe_public_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -452,9 +422,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Paypal client ID (either Sandbox or Live)')}}</label>
-                                    <a href="https://www.appinvoice.com/en/s/documentation/how-to-get-paypal-client-id-and-secret-key-22"
-                                        target="_blank" class="" data-toggle="tooltip" data-placement="top"
-                                        title="Help">
+                                    <a href="https://www.appinvoice.com/en/s/documentation/how-to-get-paypal-client-id-and-secret-key-22" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
                                     <input type="text" value="{{ $setting->paypal_client_id }}" name="paypal_client_id" class="hide_value form-control @error('paypal_client_id') is-invalid @enderror">
@@ -466,9 +434,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('paypal Secret key (either Sandbox or Live)')}}</label>
-                                    <input type="text" value="{{ $setting->paypal_secret_key }}"
-                                        name="paypal_secret_key"
-                                        class="hide_value form-control @error('paypal_secret_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->paypal_secret_key }}" name="paypal_secret_key" class="hide_value form-control @error('paypal_secret_key') is-invalid @enderror">
                                     @error('paypal_secret_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -478,13 +444,10 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Razorpay key')}}</label>
-                                    <a href="https://razorpay.com/docs/payments/dashboard/settings/api-keys/"
-                                        target="_blank" class="" data-toggle="tooltip" data-placement="top"
-                                        title="Help">
+                                    <a href="https://razorpay.com/docs/payments/dashboard/settings/api-keys/" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->razor_key }}" name="razor_key"
-                                        class="hide_value form-control @error('razor_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->razor_key }}" name="razor_key" class="hide_value form-control @error('razor_key') is-invalid @enderror">
                                     @error('razor_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -493,12 +456,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Flutterwave Key')}}</label>
-                                    <a href="https://developer.flutterwave.com/docs/quickstart/" target="_blank"
-                                        class="" data-toggle="tooltip" data-placement="top" title="Help">
+                                    <a href="https://developer.flutterwave.com/docs/quickstart/" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->flutterwave_key }}" name="flutterwave_key"
-                                        class="hide_value form-control @error('flutterwave_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->flutterwave_key }}" name="flutterwave_key" class="hide_value form-control @error('flutterwave_key') is-invalid @enderror">
                                     @error('flutterwave_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -507,9 +468,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Flutterwave Encryption Key')}}</label>
-                                    <input type="text" value="{{ $setting->flutterwave_encryption_key }}"
-                                        name="flutterwave_encryption_key"
-                                        class="hide_value form-control @error('flutterwave_encryption_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->flutterwave_encryption_key }}" name="flutterwave_encryption_key" class="hide_value form-control @error('flutterwave_encryption_key') is-invalid @enderror">
                                     @error('flutterwave_encryption_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -533,9 +492,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Paystack Key')}}</label>
-                                    <a href="https://support.paystack.com/hc/en-us/articles/360011508199-How-do-I-generate-new-API-keys"
-                                        target="_blank" class="" data-toggle="tooltip" data-placement="top"
-                                        title="Help">
+                                    <a href="https://support.paystack.com/hc/en-us/articles/360011508199-How-do-I-generate-new-API-keys" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
                                     <input type="text" value="{{ $setting->paystack_public_key }}" name="paystack_public_key" class="hide_value form-control @error('paystack_public_key') is-invalid @enderror">
@@ -560,37 +517,31 @@
                                     <div class="col-md-4 form-group">
                                         <label class="col-form-label">{{__('User and doctor verification')}}</label>
                                         <label class="cursor-pointer">
-                                            <input type="checkbox" name="verification" class="custom-switch-input"
-                                                value="1" {{ $setting->verification == 1 ? 'checked' : '' }}>
+                                            <input type="checkbox" name="verification" class="custom-switch-input" value="1" {{ $setting->verification == 1 ? 'checked' : '' }}>
                                             <span class="custom-switch-indicator"></span>
-                                        </label>                                      
+                                        </label>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="col-form-label">{{__('Verification using email ?')}}</label>
                                         <label class="cursor-pointer">
-                                            <input type="checkbox" name="using_mail" class="custom-switch-input"
-                                                value="1" {{ $setting->using_mail == 1 ? 'checked' : '' }}>
+                                            <input type="checkbox" name="using_mail" class="custom-switch-input" value="1" {{ $setting->using_mail == 1 ? 'checked' : '' }}>
                                             <span class="custom-switch-indicator"></span>
                                         </label>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="col-form-label">{{__('Verification using message ?')}}</label>
                                         <label class="cursor-pointer">
-                                            <input type="checkbox" name="using_msg" class="custom-switch-input"
-                                                value="1" {{ $setting->using_msg == 1 ? 'checked' : '' }}>
+                                            <input type="checkbox" name="using_msg" class="custom-switch-input" value="1" {{ $setting->using_msg == 1 ? 'checked' : '' }}>
                                             <span class="custom-switch-indicator"></span>
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Twilio auth token')}}</label>
-                                    <a href="https://www.twilio.com/docs/glossary/what-is-an-api-key" target="_blank"
-                                        class="" data-toggle="tooltip" data-placement="top" title="Help">
+                                    <a href="https://www.twilio.com/docs/glossary/what-is-an-api-key" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->twilio_auth_token }}"
-                                        name="twilio_auth_token"
-                                        class="hide_value form-control @error('twilio_auth_token') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->twilio_auth_token }}" name="twilio_auth_token" class="hide_value form-control @error('twilio_auth_token') is-invalid @enderror">
                                     @error('twilio_auth_token')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -599,8 +550,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('twilio account id')}}</label>
-                                    <input type="text" value="{{ $setting->twilio_acc_id }}" name="twilio_acc_id"
-                                        class="hide_value form-control @error('twilio_acc_id') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->twilio_acc_id }}" name="twilio_acc_id" class="hide_value form-control @error('twilio_acc_id') is-invalid @enderror">
                                     @error('twilio_acc_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -610,8 +560,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('twilio phone number')}}</label>
-                                    <input type="text" value="{{ $setting->twilio_phone_no }}" name="twilio_phone_no"
-                                        class="hide_value form-control @error('twilio_phone_no') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->twilio_phone_no }}" name="twilio_phone_no" class="hide_value form-control @error('twilio_phone_no') is-invalid @enderror">
                                     @error('twilio_phone_no')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -620,12 +569,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail mailer')}}</label>
-                                    <a href="https://sendgrid.com/blog/what-is-an-smtp-server/" target="_blank" class=""
-                                        data-toggle="tooltip" data-placement="top" title="Help">
+                                    <a href="https://sendgrid.com/blog/what-is-an-smtp-server/" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->mail_mailer }}" name="mail_mailer"
-                                        class="hide_value form-control @error('mail_mailer') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_mailer }}" name="mail_mailer" class="hide_value form-control @error('mail_mailer') is-invalid @enderror">
                                     @error('mail_mailer')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -634,8 +581,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail host')}}</label>
-                                    <input type="text" value="{{ $setting->mail_host }}" name="mail_host"
-                                        class="hide_value form-control @error('mail_host') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_host }}" name="mail_host" class="hide_value form-control @error('mail_host') is-invalid @enderror">
                                     @error('mail_host')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -645,8 +591,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail port')}}</label>
-                                    <input type="text" value="{{ $setting->mail_port }}" name="mail_port"
-                                        class="hide_value form-control @error('mail_port') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_port }}" name="mail_port" class="hide_value form-control @error('mail_port') is-invalid @enderror">
                                     @error('mail_port')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -655,8 +600,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail username')}}</label>
-                                    <input type="text" value="{{ $setting->mail_username }}" name="mail_username"
-                                        class="hide_value form-control @error('mail_username') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_username }}" name="mail_username" class="hide_value form-control @error('mail_username') is-invalid @enderror">
                                     @error('mail_username')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -665,8 +609,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail password')}}</label>
-                                    <input type="text" value="{{ $setting->mail_password }}" name="mail_password"
-                                        class="hide_value form-control @error('mail_password') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_password }}" name="mail_password" class="hide_value form-control @error('mail_password') is-invalid @enderror">
                                     @error('mail_password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -675,8 +618,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail encryption')}}</label>
-                                    <input type="text" value="{{ $setting->mail_encryption }}" name="mail_encryption"
-                                        class="hide_value form-control @error('mail_encryption') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_encryption }}" name="mail_encryption" class="hide_value form-control @error('mail_encryption') is-invalid @enderror">
                                     @error('mail_encryption')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -685,9 +627,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail from address')}}</label>
-                                    <input type="text" value="{{ $setting->mail_from_address }}"
-                                        name="mail_from_address"
-                                        class="hide_value form-control @error('mail_from_address') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_from_address }}" name="mail_from_address" class="hide_value form-control @error('mail_from_address') is-invalid @enderror">
                                     @error('mail_from_address')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -696,8 +636,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('mail from name')}}</label>
-                                    <input type="text" value="{{ $setting->mail_from_name }}" name="mail_from_name"
-                                        class="hide_value form-control @error('mail_from_name') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->mail_from_name }}" name="mail_from_name" class="hide_value form-control @error('mail_from_name') is-invalid @enderror">
                                     @error('mail_from_name')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -834,8 +773,7 @@
                                         <label class="col-form-label">{{__('Send Push Notification To
                                             Patient?')}}</label>
                                         <label class="cursor-pointer">
-                                            <input type="checkbox" name="patient_notification"
-                                                class="custom-switch-input" value="1" {{ $setting->patient_notification
+                                            <input type="checkbox" name="patient_notification" class="custom-switch-input" value="1" {{ $setting->patient_notification
                                             == 1 ? 'checked' : '' }}>
                                             <span class="custom-switch-indicator"></span>
                                         </label>
@@ -844,8 +782,7 @@
                                         <label class="col-form-label">{{__('Send Push Notification To
                                             Doctor?')}}</label>
                                         <label class="cursor-pointer">
-                                            <input type="checkbox" name="doctor_notification"
-                                                class="custom-switch-input" value="1" {{ $setting->doctor_notification
+                                            <input type="checkbox" name="doctor_notification" class="custom-switch-input" value="1" {{ $setting->doctor_notification
                                             == 1 ? 'checked' : '' }}>
                                             <span class="custom-switch-indicator"></span>
                                         </label>
@@ -856,12 +793,10 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('App ID')}}</label>
-                                    <a href="https://documentation.onesignal.com/docs/accounts-and-keys" target="_blank"
-                                        class="" data-toggle="tooltip" data-placement="top" title="Help">
+                                    <a href="https://documentation.onesignal.com/docs/accounts-and-keys" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->patient_app_id }}" name="patient_app_id"
-                                        class="hide_value form-control @error('patient_app_id') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->patient_app_id }}" name="patient_app_id" class="hide_value form-control @error('patient_app_id') is-invalid @enderror">
                                     @error('patient_app_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -870,8 +805,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Auth key')}}</label>
-                                    <input type="text" value="{{ $setting->patient_auth_key }}" name="patient_auth_key"
-                                        class="hide_value form-control @error('patient_auth_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->patient_auth_key }}" name="patient_auth_key" class="hide_value form-control @error('patient_auth_key') is-invalid @enderror">
                                     @error('patient_auth_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -880,8 +814,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('API key')}}</label>
-                                    <input type="text" value="{{ $setting->patient_api_key }}" name="patient_api_key"
-                                        class="hide_value form-control @error('patient_api_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->patient_api_key }}" name="patient_api_key" class="hide_value form-control @error('patient_api_key') is-invalid @enderror">
                                     @error('patient_api_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -891,12 +824,10 @@
                                 <label class="mt-5 text-primary" class="col-form-label">{{__('For Doctor :: ')}}</label>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('App ID')}}</label>
-                                    <a href="https://documentation.onesignal.com/docs/accounts-and-keys" target="_blank"
-                                        class="" data-toggle="tooltip" data-placement="top" title="Help">
+                                    <a href="https://documentation.onesignal.com/docs/accounts-and-keys" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input type="text" value="{{ $setting->doctor_app_id }}" name="doctor_app_id"
-                                        class="hide_value form-control @error('doctor_app_id') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->doctor_app_id }}" name="doctor_app_id" class="hide_value form-control @error('doctor_app_id') is-invalid @enderror">
                                     @error('doctor_app_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -905,8 +836,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Auth key')}}</label>
-                                    <input type="text" value="{{ $setting->doctor_auth_key }}" name="doctor_auth_key"
-                                        class="hide_value form-control @error('doctor_auth_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->doctor_auth_key }}" name="doctor_auth_key" class="hide_value form-control @error('doctor_auth_key') is-invalid @enderror">
                                     @error('doctor_auth_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -916,8 +846,7 @@
 
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('API key')}}</label>
-                                    <input type="text" value="{{ $setting->doctor_api_key }}" name="doctor_api_key"
-                                        class="hide_value form-control @error('doctor_api_key') is-invalid @enderror">
+                                    <input type="text" value="{{ $setting->doctor_api_key }}" name="doctor_api_key" class="hide_value form-control @error('doctor_api_key') is-invalid @enderror">
                                     @error('doctor_api_key')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -935,8 +864,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Privacy Policy')}}</label>
-                                    <textarea name="privacy_policy"
-                                        class="form-control summernote @error('privacy_policy') is-invalid @enderror">{{ $setting->privacy_policy }}</textarea>
+                                    <textarea name="privacy_policy" class="form-control summernote @error('privacy_policy') is-invalid @enderror">{{ $setting->privacy_policy }}</textarea>
                                     @error('privacy_policy')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -945,8 +873,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('About Us')}}</label>
-                                    <textarea name="about_us"
-                                        class="form-control summernote @error('about_us') is-invalid @enderror">{{ $setting->about_us }}</textarea>
+                                    <textarea name="about_us" class="form-control summernote @error('about_us') is-invalid @enderror">{{ $setting->about_us }}</textarea>
                                     @error('about_us')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -955,8 +882,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Home Content')}}</label>
-                                    <input name="home_content"
-                                        class="form-control @error('home_content') is-invalid @enderror" value=" {{$setting->home_content }}">
+                                    <input name="home_content" class="form-control @error('home_content') is-invalid @enderror" value=" {{$setting->home_content }}">
                                     @error('home_content')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -965,8 +891,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Home Content Description')}}</label>
-                                    <textarea name="home_content_desc"
-                                        class="form-control summernote @error('home_content_desc') is-invalid @enderror">{{ $setting->home_content_desc }}</textarea>
+                                    <textarea name="home_content_desc" class="form-control summernote @error('home_content_desc') is-invalid @enderror">{{ $setting->home_content_desc }}</textarea>
                                     @error('home_content_desc')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -984,14 +909,10 @@
                                 @csrf
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Agora App Id')}}</label>
-                                    <a href="https://docs.agora.io/en/voice-calling/reference/manage-agora-account?platform=android"
-                                        target="_blank" class="" data-toggle="tooltip" data-placement="top"
-                                        title="Help">
+                                    <a href="https://docs.agora.io/en/voice-calling/reference/manage-agora-account?platform=android" target="_blank" class="" data-toggle="tooltip" data-placement="top" title="Help">
                                         <i class="fa fa-info-circle" aria-hidden="true"></i>
                                     </a>
-                                    <input name="agora_app_id"
-                                        class="hide_value form-control @error('agora_app_id') is-invalid @enderror"
-                                        value="{{ $setting->agora_app_id }}">
+                                    <input name="agora_app_id" class="hide_value form-control @error('agora_app_id') is-invalid @enderror" value="{{ $setting->agora_app_id }}">
                                     @error('agora_app_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -1000,9 +921,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Agora App Certificate')}}</label>
-                                    <input name="agora_app_certificate"
-                                        class="hide_value form-control @error('agora_app_certificate') is-invalid @enderror"
-                                        value="{{ $setting->agora_app_certificate }}">
+                                    <input name="agora_app_certificate" class="hide_value form-control @error('agora_app_certificate') is-invalid @enderror" value="{{ $setting->agora_app_certificate }}">
                                     @error('agora_app_certificate')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -1016,14 +935,12 @@
                         </div>
                         @endif
 
-                        <div class="tab-pane {{ $setting->license_verify == 0 ? ' show active' : ''  }}"
-                            id="solid-justified-tab7">
+                        <div class="tab-pane {{ $setting->license_verify == 0 ? ' show active' : ''  }}" id="solid-justified-tab7">
                             <form action="{{url('update_licence_setting')}}" method="POST" class="myform">
                                 @csrf
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('License Code')}}</label>
-                                    <input type="text" required {{ $setting->license_verify == 1 ? 'disabled' : '' }}
-                                    value="{{ $setting->license_code }}" name="license_code" class="hide_value form-control
+                                    <input type="text" required {{ $setting->license_verify == 1 ? 'disabled' : '' }} value="{{ $setting->license_code }}" name="license_code" class="hide_value form-control
                                     @error('license_code') is-invalid @enderror">
                                     @error('license_code')
                                     <div class="invalid-feedback">
@@ -1033,8 +950,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-form-label">{{__('Client Name')}}</label>
-                                    <input type="text" required {{ $setting->license_verify == 1 ? 'disabled' : '' }}
-                                    value="{{ $setting->client_name }}" name="client_name" class="hide_value form-control
+                                    <input type="text" required {{ $setting->license_verify == 1 ? 'disabled' : '' }} value="{{ $setting->client_name }}" name="client_name" class="hide_value form-control
                                     @error('client_name') is-invalid @enderror">
                                     @error('client_name')
                                     <div class="invalid-feedback">
@@ -1043,8 +959,7 @@
                                     @enderror
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" {{ $setting->license_verify == 1 ? 'disabled' : '' }}
-                                        class="btn btn-primary mt-5">{{__('save')}}</button>
+                                    <button type="submit" {{ $setting->license_verify == 1 ? 'disabled' : '' }} class="btn btn-primary mt-5">{{__('save')}}</button>
                                 </div>
                             </form>
                         </div>
@@ -1054,8 +969,7 @@
         </div>
     </div>
 </section>
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -1067,8 +981,7 @@
             </div>
             <div class="modal-body">
                 <label class="col-form-label">{{__('Recipient Email for SMTP Testing')}}</label>
-                <input type="text" name="mail_to" id="to" value="{{auth()->user()->email}}" required
-                    class="form-control @error('mail_to') is-invalid @enderror">
+                <input type="text" name="mail_to" id="to" value="{{auth()->user()->email}}" required class="form-control @error('mail_to') is-invalid @enderror">
                 <span class="text-danger" id="validate"></span>
                 @error('mail_to')
                 <div class="invalid-feedback">
@@ -1088,12 +1001,11 @@
 
 @section('js')
 <script>
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         function readURL4(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     $('#imagePreview4').css('background-image', 'url(' + e.target.result + ')');
                     $('#imagePreview4').hide();
                     $('#imagePreview4').fadeIn(650);
@@ -1101,10 +1013,9 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        $("#image4").change(function () {
+        $("#image4").change(function() {
             readURL4(this);
         });
     });
 </script>
 @endsection
-

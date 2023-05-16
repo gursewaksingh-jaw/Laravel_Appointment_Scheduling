@@ -7,7 +7,7 @@ $app_logo = App\Models\Setting::first();
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="{{ url('/home') }}">
-                <img src="{{asset('logo/twslogo.png')}}" width="180" height="45" alt="Logo" style="object-fit: contain;">
+                <img src="{{ $app_logo->logo }}" width="180" height="45" alt="Logo" style="object-fit: contain;">
             </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
@@ -272,7 +272,7 @@ $app_logo = App\Models\Setting::first();
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a href="{{ url('/doctor_home') }}">
-                <img src="{{asset('logo/twslogo.png')}}" width="80" height="45" alt="Logo">
+                <img src="{{ $app_logo->logo }}" width="80" height="45" alt="Logo">
             </a>
         </div>
         <ul class="sidebar-menu">

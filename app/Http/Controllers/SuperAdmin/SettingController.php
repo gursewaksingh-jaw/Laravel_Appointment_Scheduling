@@ -21,47 +21,45 @@ class SettingController extends Controller
         $timezones = Timezone::get();
         $currencies = Currency::get();
         $languages = Language::whereStatus(1)->get();
-        return view('superAdmin.setting.setting',compact('setting','timezones','currencies','languages'));
+        return view('superAdmin.setting.setting', compact('setting', 'timezones', 'currencies', 'languages'));
     }
 
     public function update_general_setting(Request $request)
     {
-        $request->validate([
-            'email' => 'bail|email',
-            'contact' => 'bail|digits_between:6,12',
-            'company_white_logo' => 'bail|max:1000',
-            'company_logo' => 'bail|mimes:jpeg,png,jpg|max:1000',
-            'company_favicon' => 'bail|mimes:jpeg,png,jpg|max:1000',
-        ],
-        [
-            'company_white_logo.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ],
-        [
-            'company_logo.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ],
-        [
-            'company_favicon.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
-        ],
+        $request->validate(
+            [
+                'email' => 'bail|email',
+                'contact' => 'bail|digits_between:6,12',
+                'company_white_logo' => 'bail|max:1000',
+                'company_logo' => 'bail|mimes:jpeg,png,jpg|max:1000',
+                'company_favicon' => 'bail|mimes:jpeg,png,jpg|max:1000',
+            ],
+            [
+                'company_white_logo.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            ],
+            [
+                'company_logo.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            ],
+            [
+                'company_favicon.max' => 'The Image May Not Be Greater Than 1 MegaBytes.',
+            ],
         );
         $setting = Setting::first();
         $data = $request->all();
-        $currency = Currency::where('id',$data['currency_code'])->first();
+        $currency = Currency::where('id', $data['currency_code'])->first();
         $data['currency_symbol'] = $currency->symbol;
         $data['currency_id'] = $data['currency_code'];
         $data['currency_code'] = $currency->code;
         // $data['currency_symbol'] = Currency::where('code',$data['currency_code'])->first()->symbol;
-        if($request->hasFile('company_white_logo'))
-        {
+        if ($request->hasFile('company_white_logo')) {
             (new CustomController)->deleteFile($setting->company_white_logo);
             $data['company_white_logo'] = (new CustomController)->imageUpload($request->company_white_logo);
         }
-        if($request->hasFile('company_logo'))
-        {
+        if ($request->hasFile('company_logo')) {
             (new CustomController)->deleteFile($setting->company_logo);
             $data['company_logo'] = (new CustomController)->imageUpload($request->company_logo);
         }
-        if($request->hasFile('company_favicon'))
-        {
+        if ($request->hasFile('company_favicon')) {
             (new CustomController)->deleteFile($setting->company_favicon);
             $data['company_favicon'] = (new CustomController)->imageUpload($request->company_favicon);
         }
@@ -72,9 +70,7 @@ class SettingController extends Controller
         $success = (new CustomController)->updateENV($timezone);
         if ($success) {
             return redirect()->back()->withStatus(__('General Setting updated successfully..!!'));
-        }
-        else
-        {
+        } else {
             return redirect()->back()->with('error_msg', __('Env file has not enough permission.'));
         }
     }
@@ -84,7 +80,7 @@ class SettingController extends Controller
         $language = Setting::first()->language;
         App::setLocale($language);
         session()->put('locale', $language);
-        $direction = Language::where('name',$language)->first()->direction;
+        $direction = Language::where('name', $language)->first()->direction;
         session()->put('direction', $direction);
         return true;
     }
@@ -100,8 +96,8 @@ class SettingController extends Controller
             'paystack_public_key' => 'bail|required_if:paystack,1',
             'flutterwave_key' => 'bail|required_if:flutterwave,1'
         ]);
-        $data = $request->all();        
-        $data['stripe'] = $request->has('stripe') ? 1 : 0;      
+        $data = $request->all();
+        $data['stripe'] = $request->has('stripe') ? 1 : 0;
         $data['cod'] = $request->has('cod') ? 1 : 0;
         $data['paypal'] = $request->has('paypal') ? 1 : 0;
         $data['razor'] = $request->has('razor') ? 1 : 0;
@@ -127,39 +123,27 @@ class SettingController extends Controller
             'mail_from_address' => 'bail|required',
             'mail_from_name' => 'bail|required',
         ]);
-        $data = $request->all();       
+        $data = $request->all();
 
-        if(isset($data['verification']))
-        {
-            if(isset($data['using_mail']) || isset($data['using_msg']))
-            {
+        if (isset($data['verification'])) {
+            if (isset($data['using_mail']) || isset($data['using_msg'])) {
                 $data['verification'] = 1;
 
-                if(isset($data['using_mail']))
-                {
+                if (isset($data['using_mail'])) {
                     $data['using_mail']  = 1;
-                }
-                else
-                {
+                } else {
                     $data['using_mail']  = 0;
                 }
 
-                if(isset($data['using_msg']))
-                {
+                if (isset($data['using_msg'])) {
                     $data['using_msg']  = 1;
-                }
-                else
-                {
+                } else {
                     $data['using_msg']  = 0;
                 }
-            }
-            else
-            {
+            } else {
                 return redirect()->back()->withStatus(__('At least select one mail or sms'));
             }
-        }
-        else
-        {
+        } else {
             $data['verification'] = 0;
             $data['verification_email']  = 0;
             $data['verification_phone']  = 0;
@@ -167,21 +151,23 @@ class SettingController extends Controller
 
         Setting::find(1)->update($data);
         return redirect()->back()->withStatus(__('verification Setting updated successfully..!!'));
-
     }
 
     public function update_content(Request $request)
     {
         $data = $request->all();
         $setting = Setting::first();
-        if($request->hasFile('banner_image'))
-        {
+        if ($request->hasFile('banner_image')) {
             (new CustomController)->deleteFile($setting->banner_image);
             $data['banner_image'] = (new CustomController)->imageUpload($request->banner_image);
         }
         $setting->update($data);
         return redirect()->back()->withStatus(__('Website Setting updated successfully.!'));
     }
+
+
+
+
 
     public function update_notification(Request $request)
     {
@@ -202,6 +188,11 @@ class SettingController extends Controller
         return redirect()->back()->withStatus(__('Notification setting updated successfully..!!'));
     }
 
+
+
+
+
+
     public function update_licence_setting(Request $request)
     {
         $request->validate([
@@ -210,16 +201,13 @@ class SettingController extends Controller
         ]);
         $api = new LicenseBoxExternalAPI();
         $result = $api->activate_license($request->license_code, $request->client_name);
-        if ($result['status'] == true)
-        {
+        if ($result['status'] == true) {
             $id = Setting::find(1);
             $data = $request->all();
             $data['license_verify'] = 1;
             $id->update($data);
             return redirect('/login');
-        }
-        else
-        {
+        } else {
             return redirect()->back()->with('error_msg', $result['message']);
         }
         return redirect('admin/setting');

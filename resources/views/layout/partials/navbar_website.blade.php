@@ -1,8 +1,11 @@
+@php
+$app_logo = App\Models\Setting::first();
+@endphp
 <nav class="border-gray-200 sm:px-4 py-2.5 rounded border-b border-slate shadow-lg p-4">
     <div class="msm:mx-0 xsm:mx-0 xxsm:mx-0 xlg:mx-20 2xl:mx-20">
         <div class="flex flex-wrap items-center justify-between mx-auto">
             <a href="{{ url('/') }}" class="flex items-center ml-2">
-                <img src="{{asset('/logo/twslogo.png')}}" class="" alt="Doctro Logo" style="height:3.9rem;" />
+                <img src="{{ $app_logo->logo }}" class="" alt="Doctro Logo" style="height:3.9rem;" />
             </a>
             <div class="flex items-center md:order-2">
                 @php
@@ -118,6 +121,9 @@
                     </li>
                     <li>
                         <a href="{{url('/contact_us')}}" class="{{ $activePage == 'contactus' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('Contact Us') }}</a>
+                    </li>
+                    <li>
+                        <a href="{{url('/about-us')}}" class="{{ $activePage == 'aboutus' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('About Us') }}</a>
                     </li>
                 </ul>
             </div>

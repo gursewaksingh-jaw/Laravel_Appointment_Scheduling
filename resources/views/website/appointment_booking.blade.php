@@ -540,6 +540,7 @@
                 },
                 onApprove: function(data, actions) {
                     return actions.order.capture().then(function(details) {
+                        console.log(actions.order);
                         $('input[name=payment_type]').val('PAYPAL');
                         $('input[name=payment_status]').val(1);
                         $('input[name=payment_token]').val(details.id);

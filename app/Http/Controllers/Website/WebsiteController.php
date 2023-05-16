@@ -716,7 +716,7 @@ class WebsiteController extends Controller
 
     // BookAppointment
 
-
+    // $authuser->notify(new AppointmentNotification($doctor, $authuser));
     public function bookAppointment(Request $request)
     {
         $data = $request->all();
@@ -747,7 +747,6 @@ class WebsiteController extends Controller
         }
         $doctor = Doctor::find($data['doctor_id']);
         $authuser = auth()->user();
-        $authuser->notify(new AppointmentNotification($doctor, $authuser));
         $data['amount'] = $doctor->appointment_fees;
         if ($doctor->based_on == 'commission') {
             $comm = $doctor->appointment_fees * $doctor->commission_amount;
@@ -756,8 +755,6 @@ class WebsiteController extends Controller
         } else {
             DoctorSubscription::where('doctor_id', $doctor->id)->latest()->first()->increment('booked_appointment');
         }
-        // dd(Notification::send($doctor, new AppointmentNotification($doctor, $authuser)));
-
         $data['payment_type'] = strtoupper($data['payment_type']);
         $data = array_filter($data, function ($a) {
             return $a !== "";
