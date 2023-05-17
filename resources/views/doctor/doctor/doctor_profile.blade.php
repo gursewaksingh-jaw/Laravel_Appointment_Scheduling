@@ -273,7 +273,7 @@
             </div>
             <div class="card-body">
                 <div class="row mt-4">
-                    <div class="col-lg-6 form-group">
+                    <div class="col-lg-4 form-group">
                         <label class="col-form-label">{{__('Experience (in years)')}}</label>
                         <input type="number" name="experience" value="{{ $doctor->experience }}" class="form-control @error('experience') is-invalid @enderror">
                         @error('number')
@@ -282,10 +282,19 @@
                         </div>
                         @enderror
                     </div>
-                    <div class="col-lg-6 form-group">
+                    <div class="col-lg-4 form-group">
                         <label class="col-form-label">{{__('Appointment fees')}}</label>
                         <input type="number" name="appointment_fees" value="{{ $doctor->appointment_fees }}" class="form-control @error('appointment_fees') is-invalid @enderror">
                         @error('appointment_fees')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="col-lg-4 form-group">
+                        <label class="col-form-label">{{__('Revisit Fee')}}</label>
+                        <input type="number" name="revisit_fee" value="{{ $doctor->revisit_fee }}" class="form-control @error('revisit_fee') is-invalid @enderror">
+                        @error('number')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>

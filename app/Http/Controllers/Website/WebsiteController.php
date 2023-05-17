@@ -48,6 +48,8 @@ use App\Notifications\AppointmentNotification;
 use App\Notifications\RegisterNotification;
 use Spatie\Permission\Models\Role;
 use App\Models\ContactUs;
+use App\Events\RealTimeMessage;
+
 
 
 class WebsiteController extends Controller
@@ -62,6 +64,8 @@ class WebsiteController extends Controller
         $setting = Setting::first();
         $reviews = Review::get();
         $blogs = Blog::get();
+        $message = " Your Appointment is Approved by Our DR";
+        event(new RealTimeMessage($message));
         return view('website.home', compact('banners', 'doctors', 'treatments', 'setting', 'reviews', 'blogs'));
     }
 
@@ -1348,4 +1352,9 @@ class WebsiteController extends Controller
         $user->save();
         return redirect()->with;
     }
+
+    // public function fire_event()
+    // {
+    //     event(new RealTimeMessage('Hello World'));
+    // }
 }

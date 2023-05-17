@@ -225,6 +225,7 @@ class DoctorController extends Controller
                 'hospital_id' => 'bail|required',
                 'desc' => 'required',
                 'appointment_fees' => 'required|numeric',
+                'revisit_fee' => 'required|numeric',
                 'experience' => 'bail|required|numeric',
                 'image' => 'bail|mimes:jpeg,png,jpg',
                 'custom_timeslot' => 'bail|required_if:timeslot,other'
@@ -277,7 +278,6 @@ class DoctorController extends Controller
             }
         }
         $doctor->update($data);
-        // $this->changeLanguage();
         return redirect('/doctor_home')->withStatus(__('Doctor updated successfully..!!'));
     }
 

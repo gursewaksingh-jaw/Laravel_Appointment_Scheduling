@@ -40,6 +40,7 @@
 <link rel="stylesheet" href="{{ asset('css/rtl.css') }}">
 
 <body dir="rtl">
+
     @else
 
     <body>
@@ -64,6 +65,7 @@
         @endif
         <div class="main_content overflow-hidden">
             @yield('content')
+
         </div>
         @include('layout.partials.footer')
 
@@ -74,9 +76,13 @@
         <script type="text/javascript" src="{{ url('assets/plugins/fancybox/jquery.fancybox.min.js')}}"></script>
         <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/tw-elements.umd.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.js"></script>
-        <script src="{{ url('js/app.js') }}"></script>
         <script src="{{ url('assets/js/custom.js') }}"></script>
+        <script src="{{ url('js/app.js') }}"></script>
+        <script>
+            Echo.channel('events').listen('RealTimeMessage', (e) => alert(e.message));
+        </script>
         @yield('js')
     </body>
+
 
 </html>

@@ -91,7 +91,7 @@ $app_logo = App\Models\Setting::first();
                     </form>
                     @else
                     <div class="mt-auto mb-auto ml-3 xxsm:ml-0">
-                        <a href="{{url('/patient-login')}}" data-te-ripple-init data-te-ripple-color="light" class="rounded-none bg-purple tracking-wide px-4 py-2 text-white font-fira-sans font-normal text-sm">{{__('Sign In')}}</a>
+                        <a href="{{url('/patient-login')}}" data-te-ripple-init data-te-ripple-color="light" class="rounded-none bg-primary tracking-wide px-4 py-2 text-white font-fira-sans font-normal text-sm">{{__('Sign In')}}</a>
                     </div>
                     @endif
                 </div>
@@ -108,22 +108,22 @@ $app_logo = App\Models\Setting::first();
                 <ul class="flex flex-col p-4 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0">
 
                     <li>
-                        <a href="{{url('/')}}" class="{{ $activePage == 'home' ? 'text-purple' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('Home') }}</a>
+                        <a href="{{url('/')}}" class="{{ $activePage == 'home' ? 'text-primary' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('Home') }}</a>
                     </li>
                     <!-- <li>
-                        <a href="#" class="{{ $activePage == 'about' ? 'text-purple' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('About') }}</a>
+                        <a href="#" class="{{ $activePage == 'about' ? 'text-primary' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('About') }}</a>
                     </li> -->
                     <li>
-                        <a href="{{url('/show-doctors')}}" class="{{ $activePage == 'doctors' ? 'text-purple' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('Find Doctors') }}</a>
+                        <a href="{{url('/show-doctors')}}" class="{{ $activePage == 'doctors' ? 'text-primary' : 'text-black' }} f-18 font-fira-sans block py-2 pl-3 pr-4 rounded md:bg-transparent md:p-0" aria-current="page">{{ __('Find Doctors') }}</a>
                     </li>
                     <li>
-                        <a href="{{url('/our_blogs')}}" class="{{ $activePage == 'ourblogs' ? 'text-purple' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('Blog') }}</a>
+                        <a href="{{url('/our_blogs')}}" class="{{ $activePage == 'ourblogs' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('Blog') }}</a>
                     </li>
                     <li>
                         <a href="{{url('/contact_us')}}" class="{{ $activePage == 'contactus' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('Contact Us') }}</a>
                     </li>
                     <li>
-                        <a href="{{url('/about-us')}}" class="{{ $activePage == 'aboutus' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('About Us') }}</a>
+                        <a href="{{url('/about-us')}}" class="{{ $activePage == 'terms' ? 'text-primary' : 'text-black' }} f-18 block py-2 font-fira-sans pl-3 pr-4 rounded md:bg-transparent md:p-0">{{ __('About Us') }}</a>
                     </li>
                 </ul>
             </div>

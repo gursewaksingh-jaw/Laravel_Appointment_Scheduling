@@ -11,13 +11,13 @@ class Doctor extends Model
 
     protected $table = 'doctor';
 
-    protected $fillable = ['name','is_filled','treatment_id','category_id','custom_timeslot','dob','gender','expertise_id','timeslot','start_time','end_time','hospital_id','image','user_id','desc','education','certificate','appointment_fees','experience','since','status','based_on','commission_amount','is_popular','subscription_status','language'];
+    protected $fillable = ['name', 'is_filled', 'treatment_id', 'category_id', 'custom_timeslot', 'dob', 'gender', 'expertise_id', 'timeslot', 'start_time', 'end_time', 'hospital_id', 'image', 'user_id', 'desc', 'education', 'certificate', 'appointment_fees', 'experience', 'since', 'status', 'based_on', 'commission_amount', 'is_popular', 'subscription_status', 'language', 'revisit_fee'];
 
-    protected $appends = ['fullImage','rate','review'];
+    protected $appends = ['fullImage', 'rate', 'review'];
 
     protected function getFullImageAttribute()
     {
-        return url('images/upload').'/'.$this->image;
+        return url('images/upload') . '/' . $this->image;
     }
 
     public function expertise()
@@ -47,23 +47,20 @@ class Doctor extends Model
 
     public function getRateAttribute()
     {
-        $review = Review::where('doctor_id',$this->attributes['id'])->get();
+        $review = Review::where('doctor_id', $this->attributes['id'])->get();
         if (count($review) > 0) {
             $totalRate = 0;
-            foreach ($review as $r)
-            {
+            foreach ($review as $r) {
                 $totalRate = $totalRate + $r->rate;
             }
             return round($totalRate / count($review), 1);
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }
 
     public function getReviewAttribute()
     {
-        return Review::where('doctor_id',$this->attributes['id'])->count();
+        return Review::where('doctor_id', $this->attributes['id'])->count();
     }
 }
