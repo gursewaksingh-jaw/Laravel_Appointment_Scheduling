@@ -66,9 +66,10 @@
             </div>
             <div class="tab-content contentDisplay" id="tabs-tabContent">
                 <div class="patientDiv">
-                    <form action="{{ url('/contactus/message') }}" method="post">
-                        <input type="hidden" name="from" value="patient">
+                    <form action="{{ url('/contactus_message') }}" method="post">
                         @csrf
+                        <input type="hidden" name="from" value="patient">
+
                         <div class="pt-3">
                             <label class="font-fira-sans text-black text-sm font-normal">{{__('Name')}}</label>
                             <input type="text" name="name" value="{{ old('name') }}" class="@error('name') is-invalid @enderror w-full text-sm font-fira-sans text-gray block p-2 z-20 border border-white-light" placeholder="Enter patient name">

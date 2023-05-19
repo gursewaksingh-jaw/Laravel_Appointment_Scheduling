@@ -20,10 +20,10 @@
 @section('content')
 {{-- Your Home For Health --}}
 <div class="pt-14 border-b border-white-light mb-10 pb-10">
-    <h1 class="font-fira-sans font-semibold text-5xl text-center leading-10">{{ __('Your Home For') }} <span class="text-primary">{{ __('Health') }}</span></h1>
+    <h1 class="font-fira-sans font-semibold text-5xl text-center leading-10">{{ __('Find Better. ') }} <span class="text-primary">{{ __('Appoint Better') }}</span></h1>
     <div class="p-5">
         <p class="font-fira-sans font-normal text-lg text-center leading-5 text-gray">
-            {{ __('Find Better. Appoint Better') }}
+            <!-- {{ __('Find Better. Appoint Better') }} -->
         </p>
     </div>
     {{-- Search bar --}}
@@ -37,7 +37,7 @@
                 </div>
                 <input type="search" name="search_doctor" class="block p-2 pl-10 text-sm text-black-700 bg-white-50 border border-white-light 2xl:w-96 xmd:w-72 !sm:w-32 msm:w-40 h-12" placeholder="Search Doctor...">
             </div>
-            <div class="relative">
+            <!-- <div class="relative">
                 <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                     <i class="fa-solid fa-location-dot"></i>
                 </div>
@@ -45,7 +45,7 @@
                 <input type="search" onFocus="geolocate()" id="autocomplete" class="block p-2 pl-10 text-sm text-black-700 bg-white-50 border border-white-light 2xl:w-96 xmd:w-72 !sm:w-32 msm:w-40 h-12" placeholder="Set your location">
                 <input type="hidden" name="doc_lat">
                 <input type="hidden" name="doc_lang">
-            </div>
+            </div> -->
             <button type="button" onclick="searchDoctor()" data-te-ripple-init data-te-ripple-color="light" class="text-white bg-primary text-center px-6 py-2 text-base font-normal leading-5 font-fira-sans sm:w-32 msm:w-32 xsm:w-32 xxsm:w-32 h-12"><i class="fa-solid fa-magnifying-glass"></i> {{ __('Search') }}</button>
         </div>
     </form>

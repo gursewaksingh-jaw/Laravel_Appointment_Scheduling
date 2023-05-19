@@ -1,4 +1,4 @@
-<div class="bg-black w-full">
+<div class="bg-primary w-full">
     <div class="xl:w-3/4 mx-auto">
         <div class="xxsm:mx-5 xl:mx-0 2xl:mx-0">
             <div class="xxsm:pt-5 xxsm:pb-5 justify-between flex sm:flex-row xxsm:flex-col">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="grid msm:grid-cols-2 gap-10 xsm:grid-cols-1 xxsm:grid-cols-1 mb-5">
                     <div>
-                        <h1 class="text-primary font-medium text-lg leading-5 font-fira-sans xxsm:pt-5 sm:pt-0">{{__('For Patients')}}</h1>
+                        <h1 class="text-white font-medium text-lg leading-5 font-fira-sans xxsm:pt-5 sm:pt-0">{{__('For Patients')}}</h1>
                         <div class="2xl:pt-10 xxsm:pt-5">
                             <a href="{{url('/show-doctors')}}" class="text-white text-sm font-normal leading-4 font-fira-sans pt-10">{{__('Search for Doctors')}}</a>
                         </div>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div>
-                        <h1 class="text-primary font-medium text-lg leading-5 font-fira-sans msm:pt-5 sm:pt-0">{{__('Contact Us:')}}</h1>
+                        <h1 class="text-white font-medium text-lg leading-5 font-fira-sans msm:pt-5 sm:pt-0">{{__('Contact Us')}}</h1>
                         <div class="2xl:pt-10 xxsm:pt-5">
                             <a href="tel:{{ $setting->phone }}" class="text-white text-sm leading-4 font-fira-sans font-normal underline pt-2">{{ $setting->phone }}</a>
                         </div>

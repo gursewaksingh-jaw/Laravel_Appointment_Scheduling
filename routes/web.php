@@ -79,7 +79,7 @@ Route::group(['middleware' => ['XssSanitizer']], function () {
     Route::get('/our_blogs', [WebsiteController::class, 'ourBlogs']);
     Route::get('/contact_us', [WebsiteController::class, 'contactus']);
     Route::get('/events', [WebsiteController::class, 'fire_event']);
-    Route::POST('/contactus/message', [WebsiteController::class, 'contactus_message']);
+    Route::post('/contactus_message', [WebsiteController::class, 'contactus_message']);
     Route::get('/blog-details/{id}/{blog_name}', [WebsiteController::class, 'singleBlog']);
     Route::get('/our-offers', [WebsiteController::class, 'ourOffers']);
     Route::post('/signUp', [WebsiteController::class, 'sign_up']);

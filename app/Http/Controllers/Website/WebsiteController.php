@@ -49,6 +49,8 @@ use App\Notifications\RegisterNotification;
 use Spatie\Permission\Models\Role;
 use App\Models\ContactUs;
 use App\Events\RealTimeMessage;
+use App\Mail\BookAppointment;
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -750,6 +752,10 @@ class WebsiteController extends Controller
             $data['report_image'] = json_encode($report);
         }
         $doctor = Doctor::find($data['doctor_id']);
+        $doctorname = $doctor->name;
+        $patientname = auth()->user()->name;
+        $slotdate = $data['date'];
+        $slottime = $data['time'];
         $authuser = auth()->user();
         $data['amount'] = $doctor->appointment_fees;
         if ($doctor->based_on == 'commission') {
@@ -764,6 +770,7 @@ class WebsiteController extends Controller
             return $a !== "";
         });
         $appointment = Appointment::create($data);
+        Mail::to($doctor->email)->send(new BookAppointment($doctorname, $patientname, $slotdate, $slottime));
         return response(['success' => true]);
     }
 
@@ -1337,9 +1344,9 @@ class WebsiteController extends Controller
 
     public function contactus_message(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required',
             'number' => 'required',
             'message' => 'required'
         ]);
@@ -1349,12 +1356,8 @@ class WebsiteController extends Controller
         $user->email = $request->email;
         $user->number = $request->phone;
         $user->message = $request->message;
+        dd($user);
         $user->save();
-        return redirect()->with;
+        return redirect();
     }
-
-    // public function fire_event()
-    // {
-    //     event(new RealTimeMessage('Hello World'));
-    // }
 }

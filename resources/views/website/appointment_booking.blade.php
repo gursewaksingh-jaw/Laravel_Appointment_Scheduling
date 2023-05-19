@@ -302,11 +302,11 @@
                 <div id="step3" class="hidden">
                     <div class="flex xlg:flex-row xxsm:flex-col">
                         <div class="col-span-5 p-5 w-full">
-                            <label for="search" class="mb-2 text-sm font-medium text-gray dark:text-white mt-4 font-fira-sans">{{ __('Offer code') }}</label>
-                            <div class="relative">
+                            <!-- <label for="search" class="mb-2 text-sm font-medium text-gray dark:text-white mt-4 font-fira-sans">{{ __('Offer code') }}</label> -->
+                            <!-- <div class="relative">
                                 <input type="text" name="coupon_code" class="block font-fira-sans w-full p-2 text-sm text-gray border !border-white-light rounded-sm focus:ring-primary focus:border-primary" placeholder="{{ __('Enter coupon code') }}" required>
                                 <button type="button" class="text-primary absolute right-2.5 bottom-2.5 font-medium rounded-lg text-sm dark:bg-primary dark:hover:bg-primary dark:focus:ring-primary applyCoupon">{{ __('Apply') }}</button>
-                            </div>
+                            </div> -->
 
                             <h2 class="font-fira-sans font-medium mt-4 text-2xl">{{ __('Payment Method') }}</h2>
                             <div class="grid grid-cols-1 gap-1 md:grid-cols-4 msm:grid-cols-2">

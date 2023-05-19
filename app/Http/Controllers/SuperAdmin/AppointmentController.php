@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmAppointment;
+use App\Mail\CancelAppointment;
 use App\Notifications\DoctortoUserNotification;
 use App\Notifications\UserNotification;
 use Illuminate\Support\Facades\Session;
@@ -140,6 +141,7 @@ class AppointmentController extends Controller
         Appointment::find($appointment_id)->update(['appointment_status' => 'approve']);
         $this->notificationChange($appointment_id, 'Accept');
         $patient->notify(new UserNotification($doctorname));
+        Mail::to('akash7@mailinator.com')->send(new ConfirmAppointment($doctorname, $patientname, $slot));
         return back()->with('status', __('status change successfully...!!'));
     }
 
@@ -148,8 +150,13 @@ class AppointmentController extends Controller
 
     public function cancelAppointment($appointment_id)
     {
+        $doctorname = auth()->user()->name;
+        $slot = Appointment::where('id', $appointment_id)->first();
+        $patient = User::where('id', $slot->user_id)->first();
+        $patientname = $patient->name;
         Appointment::find($appointment_id)->update(['appointment_status' => 'cancel']);
         $this->notificationChange($appointment_id, 'Cancel');
+        Mail::to('akash7@mailinator.com')->send(new CancelAppointment($doctorname, $patientname, $slot));
         return redirect()->back()->with('status', __('status change successfully...!!'));
     }
 

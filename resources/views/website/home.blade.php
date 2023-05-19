@@ -73,7 +73,7 @@
 
 @section('content')
 {{-- Skip Travelling --}}
-<div class="w-full bg-cover bg-no-repeat" style="height:800px;background-image: url({{asset('/svg/patient/p_banner1.svg')}})">
+<div class="w-full bg-cover bg-no-repeat" style="height:700px;background-image: url({{asset('/svg/doctor4.svg')}})">
     <div class="xlg:mx-20 xxsm:mx-4 xsm:mx-5 pt-20">
         <h1 class="font-fira-sans text-black font-normal text-6xl !1xl:w-2/4 2xl:w-1/3 md:w-3/4 xxsm:w-full leading-snug mb-10">Skip Travelling Online <span class="text-primary">Consultation</span> is the Future</h1>
         <a class="btn btn-link text-center mt-0 rounded-none px-6 py-3 md:px-3 md:py-3 bg-primary text-white font-normal font-fira-sans text-sm" target="_blank" href="{{url('/show-doctors')}}" role="button">{{__('Make Appointment') }}</a>
@@ -290,7 +290,7 @@
                 </div>
             </div>
             <div class="mx-auto pt-24">
-                <img src="{{asset('/svg/footerbanner.svg')}}" class="bg-cover object-cover 2xl:w-[80%] 1xl:w-[70%] xl:w-[100%] lg:w-[100%] xmd:w-80 md:w-80 sm:w-full msm:w-full xsm:w-80 xxsm:w-full xlg:w-96" alt="">
+                <img src="{{asset('/svg/doctor3.svg')}}" class="bg-cover object-cover 2xl:w-[80%] 1xl:w-[70%] xl:w-[100%] lg:w-[100%] xmd:w-80 md:w-80 sm:w-full msm:w-full xsm:w-80 xxsm:w-full xlg:w-96" alt="">
             </div>
         </div>
     </div>
